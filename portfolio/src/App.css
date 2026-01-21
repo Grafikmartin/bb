@@ -54,12 +54,13 @@
   width: 100%;
   min-height: calc(100vh - var(--spacing-lg, 4rem));
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding-top: var(--spacing-lg, 4rem);
   padding-bottom: var(--spacing-lg, 4rem);
-  padding-left: var(--spacing-lg, 4rem);
-  padding-right: var(--spacing-lg, 4rem);
+  padding-left: 0; /* Kein horizontales Padding */
+  padding-right: 0; /* Kein horizontales Padding */
   background: var(--bg-primary);
   position: relative;
   box-sizing: border-box;

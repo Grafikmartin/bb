@@ -1,0 +1,179 @@
+.portfolio-section {
+  width: 100vw;
+  margin: 0;
+  padding: var(--spacing-md, 2rem) 0;
+  background: var(--bg-primary, #f1e0ce);
+  animation: fadeIn 0.5s ease-in;
+  overflow-x: hidden;
+  overflow-y: visible;
+  box-sizing: border-box;
+  position: relative;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.portfolio-container {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+  /* Verstecke Scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.portfolio-container::-webkit-scrollbar {
+  display: none;
+}
+
+.portfolio-grid {
+  display: flex;
+  gap: var(--spacing-md, 2rem);
+  align-items: flex-start;
+  width: max-content;
+  padding: 0;
+}
+
+.card {
+  position: relative;
+  width: 220px;
+  height: 320px;
+  background: var(--color-sky, #a2c5c9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: bold;
+  border-radius: 15px;
+  cursor: pointer;
+  color: var(--text-primary, #2a2a2a);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.first-card {
+  margin-left: 0;
+}
+
+.last-card {
+  margin-right: 0;
+}
+
+.card::before,
+.card::after {
+  position: absolute;
+  content: "";
+  width: 20%;
+  height: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: bold;
+  background-color: var(--color-coral, #ec9a86);
+  transition: all 0.5s;
+}
+
+.card::before {
+  top: 0;
+  right: 0;
+  border-radius: 0 15px 0 100%;
+}
+
+.card::after {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 100% 0 15px;
+}
+
+.card:hover::before,
+.card:hover::after {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  transition: all 0.5s;
+}
+
+.card:hover::after {
+  content: "HELLO";
+  color: var(--text-primary, #2a2a2a);
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+/* Media Queries für responsive Design */
+
+/* Kleine Handys (bis 480px) */
+@media (max-width: 480px) {
+  .card {
+    width: 160px;
+    height: 240px;
+    font-size: 18px;
+  }
+  
+  .portfolio-grid {
+    gap: var(--spacing-sm, 1rem);
+  }
+  
+  .portfolio-section {
+    padding: var(--spacing-sm, 1rem) 0;
+  }
+}
+
+/* Große Handys / kleine Tablets (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .card {
+    width: 180px;
+    height: 270px;
+    font-size: 20px;
+  }
+  
+  .portfolio-grid {
+    gap: var(--spacing-sm, 1rem);
+  }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .card {
+    width: 200px;
+    height: 300px;
+    font-size: 22px;
+  }
+}
+
+/* Desktop (1025px - 1440px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .card {
+    width: 220px;
+    height: 320px;
+    font-size: 25px;
+  }
+}
+
+/* Große Bildschirme (ab 1441px) */
+@media (min-width: 1441px) {
+  .card {
+    width: 240px;
+    height: 360px;
+    font-size: 28px;
+  }
+  
+  .portfolio-grid {
+    gap: var(--spacing-lg, 4rem);
+  }
+}
