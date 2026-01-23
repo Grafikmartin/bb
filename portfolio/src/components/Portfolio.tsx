@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import './Portfolio.css'
 import minigamesImage from '../assets/Minigames.webp'
+import zasterZenImage from '../assets/ZasterZen-uebersicht-karte.png'
 
 function Portfolio() {
   const cards = Array.from({ length: 10 }, (_, i) => i + 1)
@@ -12,6 +13,9 @@ function Portfolio() {
   
   // Mini Games Bild für Card 4
   const minigamesImageSrc = minigamesImage
+  
+  // ZasterZen Bild für Card 5
+  const zasterZenImageSrc = zasterZenImage
 
   // Card-Daten mit Titel und Beschreibung
   const cardData = [
@@ -91,6 +95,8 @@ function Portfolio() {
         <div className="portfolio-grid">
           {cards.map((cardNumber, index) => {
             const isCard3 = index === 2
+            const isCard4 = index === 3
+            const isCard5 = index === 4
             const cardInfo = cardData[index]
             
             return (
@@ -102,6 +108,18 @@ function Portfolio() {
                   <img 
                     src={wetterImage} 
                     alt="Wetter"
+                    className="card-icon card-icon-full"
+                  />
+                ) : isCard4 ? (
+                  <img 
+                    src={minigamesImageSrc} 
+                    alt="Mini Games"
+                    className="card-icon card-icon-full"
+                  />
+                ) : isCard5 ? (
+                  <img 
+                    src={zasterZenImageSrc} 
+                    alt="ZasterZen"
                     className="card-icon card-icon-full"
                   />
                 ) : (
