@@ -3,6 +3,16 @@
   padding: var(--spacing-lg, 4rem) var(--spacing-md, 2rem);
   text-align: center;
   background: var(--bg-primary, #f1e0ce);
+  position: relative;
+  z-index: 2001;
+  margin-top: auto;
+  margin-top: var(--spacing-xl, 6rem);
+  transition: transform 0.3s ease, margin-top 0.3s ease;
+}
+
+.app.portfolio-open .footer {
+  transform: translateY(calc(300px + var(--spacing-md, 2rem)));
+  margin-top: var(--spacing-xl, 6rem);
 }
 
 .footer-text {

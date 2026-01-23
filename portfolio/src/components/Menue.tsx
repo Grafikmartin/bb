@@ -1,18 +1,16 @@
-import { useState } from 'react'
 import './Menue.css'
 import Portfolio from './Portfolio'
 
 interface MenueProps {
   onPortfolioClick?: () => void
+  portfolioOpen?: boolean
 }
 
-function Menue({ onPortfolioClick }: MenueProps) {
-  const [showPortfolio, setShowPortfolio] = useState(false)
+function Menue({ onPortfolioClick, portfolioOpen = false }: MenueProps) {
   const menuItems = ['about', 'portfolio', 'kontakt'];
 
   const handleClick = (item: string) => {
     if (item === 'portfolio') {
-      setShowPortfolio(!showPortfolio)
       if (onPortfolioClick) {
         onPortfolioClick()
       }
@@ -20,23 +18,27 @@ function Menue({ onPortfolioClick }: MenueProps) {
   }
 
   return (
-    <nav className="menu">
-      <ul className="menu-list">
-        {menuItems.map((item, index) => (
-          <li key={index} className="menu-item">
-            <span 
-              className="menu-link"
-              onClick={() => handleClick(item)}
-            >
-              {item}
-            </span>
-            {item === 'portfolio' && showPortfolio && (
-              <Portfolio />
-            )}
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <>
+      <nav className={`menu ${portfolioOpen ? 'portfolio-open' : ''}`}>
+        <ul className="menu-list">
+          {menuItems.map((item, index) => (
+            <li key={index} className="menu-item">
+              <span 
+                className="menu-link"
+                onClick={() => handleClick(item)}
+              >
+                {item}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      {portfolioOpen && (
+        <div className="portfolio-wrapper">
+          <Portfolio />
+        </div>
+      )}
+    </>
   )
 }
 

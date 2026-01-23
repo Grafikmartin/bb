@@ -48,38 +48,94 @@
 
 .card {
   position: relative;
-  width: 220px;
-  height: 320px;
-  background: var(--color-sky, #a2c5c9);
+  width: 200px;
+  height: 300px;
+  background-color: #f2f2f2;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 25px;
-  font-weight: bold;
-  border-radius: 15px;
-  cursor: pointer;
-  color: var(--text-primary, #2a2a2a);
-  transition: all 0.3s ease;
-  flex-shrink: 0;
   overflow: hidden;
+  box-shadow: 0 0 0 5px #ffffff80;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex-shrink: 0;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
-.card.has-image {
-  background: transparent;
+.card svg {
+  width: 48px;
+  fill: #333;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.card-image {
+.card .card-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card .card-icon-full {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 15px;
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
-  display: block;
-  pointer-events: none;
+  object-fit: cover;
+  border-radius: 10px;
+  z-index: 0;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+}
+
+.card__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f2f2f2;
+  transform: rotateX(-90deg);
+  transform-origin: bottom;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  backface-visibility: hidden;
+  opacity: 0;
+}
+
+.card:hover .card__content {
+  transform: rotateX(0deg);
+  opacity: 1;
+}
+
+.card__title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 700;
+}
+
+.card:hover svg,
+.card:hover .card-icon,
+.card:hover .card-icon-full {
+  scale: 0;
+}
+
+.card__description {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: #777;
+  line-height: 1.4;
 }
 
 .first-card {
@@ -90,66 +146,21 @@
   margin-right: 0;
 }
 
-.card::before,
-.card::after {
-  position: absolute;
-  content: "";
-  width: 20%;
-  height: 20%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-  font-weight: bold;
-  background-color: var(--color-coral, #ec9a86);
-  transition: all 0.5s;
-  z-index: 2;
-}
-
-.card::before {
-  top: 0;
-  right: 0;
-  border-radius: 0 15px 0 100%;
-}
-
-.card::after {
-  bottom: 0;
-  left: 0;
-  border-radius: 0 100% 0 15px;
-}
-
-.card:hover::before,
-.card:hover::after {
-  width: 100%;
-  height: 100%;
-  border-radius: 15px;
-  transition: all 0.5s;
-}
-
-.card:hover::after {
-  color: var(--text-primary, #2a2a2a);
-}
-
-.card.card-wetter:hover::after {
-  content: "Wetter";
-}
-
-.card.card-minigames:hover::after {
-  content: "Mini Games";
-}
-
-.card:hover {
-  transform: scale(1.05);
-}
-
 /* Media Queries für responsive Design */
 
 /* Kleine Handys (bis 480px) */
 @media (max-width: 480px) {
   .card {
-    width: 160px;
-    height: 240px;
+    width: 140px;
+    height: 200px;
+  }
+  
+  .card__title {
     font-size: 18px;
+  }
+  
+  .card__description {
+    font-size: 11px;
   }
   
   .portfolio-grid {
@@ -164,9 +175,16 @@
 /* Große Handys / kleine Tablets (481px - 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
   .card {
-    width: 180px;
-    height: 270px;
+    width: 160px;
+    height: 240px;
+  }
+  
+  .card__title {
     font-size: 20px;
+  }
+  
+  .card__description {
+    font-size: 12px;
   }
   
   .portfolio-grid {
@@ -177,8 +195,11 @@
 /* Tablets (769px - 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
   .card {
-    width: 200px;
-    height: 300px;
+    width: 180px;
+    height: 270px;
+  }
+  
+  .card__title {
     font-size: 22px;
   }
 }
@@ -186,18 +207,24 @@
 /* Desktop (1025px - 1440px) */
 @media (min-width: 1025px) and (max-width: 1440px) {
   .card {
-    width: 220px;
-    height: 320px;
-    font-size: 25px;
+    width: 200px;
+    height: 300px;
   }
 }
 
 /* Große Bildschirme (ab 1441px) */
 @media (min-width: 1441px) {
   .card {
-    width: 240px;
-    height: 360px;
-    font-size: 28px;
+    width: 220px;
+    height: 330px;
+  }
+  
+  .card__title {
+    font-size: 26px;
+  }
+  
+  .card__description {
+    font-size: 15px;
   }
   
   .portfolio-grid {

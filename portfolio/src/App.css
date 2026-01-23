@@ -2,6 +2,9 @@
   width: 100%;
   background: var(--bg-primary);
   position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .aufmacher-section {
@@ -58,13 +61,15 @@
   align-items: center;
   justify-content: center;
   padding-top: var(--spacing-lg, 4rem);
-  padding-bottom: var(--spacing-lg, 4rem);
+  padding-bottom: calc(var(--spacing-lg, 4rem) + 450px);
   padding-left: 0; /* Kein horizontales Padding */
   padding-right: 0; /* Kein horizontales Padding */
   background: var(--bg-primary);
   position: relative;
   box-sizing: border-box;
   z-index: 2000; /* Höher als aufmacher-mask (1000), damit Menü darüber liegt */
+  flex: 1;
+  overflow-y: visible;
 }
 
 .welcome-text {
