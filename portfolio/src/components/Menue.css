@@ -36,6 +36,12 @@
   position: relative;
 }
 
+/* Stelle sicher, dass "portfolio" an seiner Position bleibt */
+.menu-item:nth-child(2) {
+  transform: none !important;
+  transition: none;
+}
+
 .menu-link {
   font-size: clamp(1.5rem, 4vw, 3rem);
   font-weight: 500;

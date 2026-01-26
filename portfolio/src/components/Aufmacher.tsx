@@ -1,9 +1,21 @@
 import { useState, useEffect, useRef } from 'react'
 import '../App.css'
 
-const colors: string[] = ['#e36255', '#ec9a86', '#a2c5c9', '#f3c262'];
+// Funktion zum Lesen der CSS-Variablen
+const getColorsFromCSS = (): string[] => {
+  if (typeof window === 'undefined') {
+    return ['#e36255', '#ec9a86', '#a2c5c9', '#f3c262']; // Fallback
+  }
+  const root = document.documentElement;
+  return [
+    getComputedStyle(root).getPropertyValue('--color-signal').trim() || '#e36255',
+    getComputedStyle(root).getPropertyValue('--color-coral').trim() || '#ec9a86',
+    getComputedStyle(root).getPropertyValue('--color-sky').trim() || '#a2c5c9',
+    getComputedStyle(root).getPropertyValue('--color-gold').trim() || '#f3c262',
+  ];
+};
 
-function getNextColor(prevColorIndex: number): number {
+function getNextColor(prevColorIndex: number, colors: string[]): number {
   // Wähle eine zufällige Farbe, die nicht die gleiche wie die vorherige ist
   const availableIndices = colors
     .map((_, index) => index)
@@ -32,10 +44,11 @@ function Aufmacher() {
 
   // Initiale Farbverteilung
   const getInitialColors = (): string[] => {
+    const colors = getColorsFromCSS();
     const charColors: string[] = [];
     let prevColorIndex = -1;
     allLetters.forEach(() => {
-      const colorIndex = getNextColor(prevColorIndex);
+      const colorIndex = getNextColor(prevColorIndex, colors);
       charColors.push(colors[colorIndex]);
       prevColorIndex = colorIndex;
     });
@@ -82,13 +95,53 @@ function Aufmacher() {
   const [returningLines, setReturningLines] = useState<Set<number>>(new Set());
   const lineRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
-  // Animation: Wechsle Farben beim Höchstpunkt (bei 35% = 2.1s) - beim großen Sprung
+  // Aktualisiere Farben, wenn sich das Theme ändert (durch CSS-Variablen-Änderung)
+  useEffect(() => {
+    const updateColors = () => {
+      const colors = getColorsFromCSS();
+      setCharColors(prevColors => {
+        const newColors = [...prevColors];
+        prevColors.forEach((oldColor, index) => {
+          // Finde den Index der alten Farbe im neuen Farb-Array
+          const oldIndex = colors.indexOf(oldColor);
+          if (oldIndex === -1) {
+            // Wenn die alte Farbe nicht mehr existiert, wähle eine zufällige neue
+            const randomIndex = Math.floor(Math.random() * colors.length);
+            newColors[index] = colors[randomIndex];
+          } else {
+            // Behalte die gleiche Position im Array
+            newColors[index] = colors[oldIndex % colors.length];
+          }
+        });
+        return newColors;
+      });
+    };
+
+    // Beobachte Änderungen an CSS-Variablen
+    const observer = new MutationObserver(updateColors);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    // Initiale Aktualisierung nach kurzer Verzögerung (wenn Theme geladen ist)
+    const timeout = setTimeout(updateColors, 100);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  // Animation: Wechsle Farben NUR während des Sprunges (20-50% = 1.2s-3s)
   // Synchronisiert mit CSS-Animation (6 Sekunden Zyklus)
+  // Sprung findet zwischen 20% (1.2s) und 50% (3s) statt
   useEffect(() => {
     const animationCycleDuration = 6000; // Synchron mit CSS-Animation (6s infinite)
-    const animationStart = 1200; // Animation startet bei 20% = 1.2s
-    // Farbwechsel beginnt früher (bei 30% = 1.8s) für sanfteren Übergang
-    const colorChangeOffset = 600; // Farbe wechselt bei 30% = 1.8s (früher für sanfteren Verlauf)
+    const jumpStart = 1200; // Sprung startet bei 20% = 1.2s
+    const jumpEnd = 3000; // Sprung endet bei 50% = 3s
+    // Farbwechsel während des Sprunges (bei 22-23% = 1.3-1.4s)
+    const colorChangeOffset = 200; // Farbe wechselt bei 22-23% = 1.3-1.4s (während des Sprunges)
     
     // Für jeden Buchstaben einen individuellen Timer starten
     const allTimers = charDelays.map((delay, index) => {
@@ -96,6 +149,7 @@ function Aufmacher() {
       
       // Funktion zum Farbwechsel - garantiert immer eine andere Farbe
       const changeColor = () => {
+        const colors = getColorsFromCSS();
         setCharColors(prevColors => {
           const newColors = [...prevColors];
           const currentColor = prevColors[index];
@@ -118,21 +172,21 @@ function Aufmacher() {
       };
       
       // Plane Farbwechsel synchronisiert mit CSS-Animation
-      // Jeder Buchstabe animiert alle 6 Sekunden (wie die CSS-Animation)
-      // Der Farbwechsel erfolgt bei jedem Animationszyklus beim Höchstpunkt
+      // WICHTIG: Farbwechsel NUR während des Sprunges (20-50% = 1.2s-3s)
       for (let cycle = 0; cycle < 200; cycle++) {
         // Berechne die Zeit für diesen Animationszyklus
         // delay ist das initiale Delay für diesen Buchstaben
         // Jeder Zyklus dauert 6 Sekunden (wie die CSS-Animation)
         const cycleStart = delay + (cycle * animationCycleDuration);
-        const changeTime = cycleStart + animationStart + colorChangeOffset;
+        const changeTime = cycleStart + jumpStart + colorChangeOffset;
         
-        // Prüfe, ob der Farbwechsel innerhalb eines gültigen Animationszyklus liegt
-        // (nur während der aktiven Phase: 20-50% = 1.2s bis 3s innerhalb jedes 6s Zyklus)
-        const animationStartTime = cycleStart + animationStart;
-        const animationEndTime = cycleStart + 3000; // 50% = 3s
+        // Prüfe, ob der Farbwechsel WIRKLICH während des Sprunges liegt
+        // Sprung: 20% (1.2s) bis 50% (3s) innerhalb jedes 6s Zyklus
+        const jumpStartTime = cycleStart + jumpStart;
+        const jumpEndTime = cycleStart + jumpEnd;
         
-        if (changeTime >= animationStartTime && changeTime <= animationEndTime) {
+        // Nur wenn der Farbwechsel während des Sprunges liegt
+        if (changeTime >= jumpStartTime && changeTime <= jumpEndTime) {
           const timer = setTimeout(changeColor, changeTime);
           timers.push(timer);
         }

@@ -7,6 +7,9 @@ function Portfolio() {
   const cards = Array.from({ length: 10 }, (_, i) => i + 1)
   const containerRef = useRef<HTMLDivElement>(null)
   const scrollIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const isScrollingRef = useRef(false)
+  const isUserScrollingRef = useRef(false)
+  const mouseOverContainerRef = useRef(false)
   
   // Wetter-Bild für Card 3
   const wetterImage = '/design/wetter/wetter.webp.png'
@@ -31,14 +34,123 @@ function Portfolio() {
     { title: 'Card 10', description: 'Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.' },
   ]
 
+  // Echte Endlosschleife: Cards einfach mehrfach wiederholen
+  // Links: Card 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 (rückwärts) - mehrmals
+  // Mitte: Card 1-10 (normal) - mehrmals  
+  // Rechts: Card 1-10 (vorwärts) - mehrmals
+  const reversedCards = [...cards].reverse() // 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+  const repetitions = 5 // Anzahl Wiederholungen für endloses Scrollen
+  const infiniteCards = [
+    ...Array(repetitions).fill(reversedCards).flat(),  // Links: rückwärts mehrmals
+    ...Array(repetitions).fill(cards).flat(),         // Mitte: normal mehrmals
+    ...Array(repetitions).fill(cards).flat()          // Rechts: vorwärts mehrmals
+  ]
+
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
 
     let animationFrameId: number | null = null
 
+    const getCardDimensions = () => {
+      const firstCard = container?.querySelector('.card') as HTMLElement
+      const secondCard = container?.querySelectorAll('.card')[1] as HTMLElement
+      
+      if (!firstCard) return { width: 200, gap: 32 }
+      
+      const cardRect = firstCard.getBoundingClientRect()
+      const cardWidth = cardRect.width
+      
+      // Berechne Gap aus dem Abstand zwischen zwei Cards
+      let gap = 32 // Fallback
+      if (secondCard) {
+        const secondCardRect = secondCard.getBoundingClientRect()
+        gap = secondCardRect.left - (cardRect.left + cardWidth)
+      } else {
+        // Fallback: Versuche CSS-Variable zu lesen
+        const spacingMd = getComputedStyle(document.documentElement).getPropertyValue('--spacing-md')
+        if (spacingMd) {
+          gap = parseFloat(spacingMd) * 16 // rem zu px (wenn rem verwendet wird)
+        }
+      }
+      
+      return { width: cardWidth, gap: Math.max(0, gap) }
+    }
+
+    // Initialisiere Scroll-Position auf den ersten Card 1 in der Mitte
+    const initializeScroll = () => {
+      const { width, gap } = getCardDimensions()
+      const singleCardWidth = width + gap
+      const leftCopiesWidth = singleCardWidth * 10 * repetitions // Alle rückwärts Cards
+      const middleSetStart = leftCopiesWidth // Start der normalen Card 1-10
+      
+      if (container) {
+        container.scrollLeft = middleSetStart
+      }
+    }
+
+    // Setze initiale Position auf den ersten Card 1 in der Mitte
+    setTimeout(initializeScroll, 100)
+
+    const handleScroll = () => {
+      if (!container || isScrollingRef.current) return
+
+      // Markiere, dass der Benutzer gerade scrollt (Touch/Trackpad)
+      isUserScrollingRef.current = true
+      clearTimeout(scrollIntervalRef.current as NodeJS.Timeout)
+      scrollIntervalRef.current = setTimeout(() => {
+        isUserScrollingRef.current = false
+      }, 150)
+
+      const { width, gap } = getCardDimensions()
+      const singleCardWidth = width + gap
+      const sequenceWidth = singleCardWidth * 10 // Breite einer Sequenz (10 Cards)
+      const leftCopiesWidth = sequenceWidth * repetitions // Alle rückwärts Cards
+      const middleSetStart = leftCopiesWidth // Start der normalen Card 1-10
+      const middleSetWidth = sequenceWidth * repetitions // Alle normalen Cards
+      const middleSetEnd = middleSetStart + middleSetWidth
+      const rightCopiesStart = middleSetEnd // Start der vorwärts Cards
+      const rightCopiesEnd = rightCopiesStart + (sequenceWidth * repetitions)
+      const scrollLeft = container.scrollLeft
+      const threshold = singleCardWidth * 0.1 // Kleiner Schwellenwert
+
+      // Nahtloser Übergang nach rechts: Wenn wir am Ende der letzten Wiederholung sind,
+      // springe zum Anfang der ersten Wiederholung (visuell identisch)
+      if (scrollLeft >= rightCopiesEnd - threshold) {
+        isScrollingRef.current = true
+        const offset = (scrollLeft - rightCopiesEnd) % sequenceWidth
+        container.scrollLeft = rightCopiesStart + offset
+        setTimeout(() => {
+          isScrollingRef.current = false
+        }, 10)
+      }
+      // Nahtloser Übergang nach links: Wenn wir am Anfang vor den rückwärts Cards sind,
+      // springe zum Ende der letzten rückwärts Wiederholung (visuell identisch)
+      else if (scrollLeft <= threshold) {
+        isScrollingRef.current = true
+        const offset = scrollLeft % sequenceWidth
+        container.scrollLeft = leftCopiesWidth - sequenceWidth + offset
+        setTimeout(() => {
+          isScrollingRef.current = false
+        }, 10)
+      }
+    }
+
+    const handleMouseEnter = () => {
+      mouseOverContainerRef.current = true
+    }
+
+    const handleMouseLeave = () => {
+      mouseOverContainerRef.current = false
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+        animationFrameId = null
+      }
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
-      if (!container) return
+      // Nur Hover-Scrolling, wenn Maus über Container ist und Benutzer nicht manuell scrollt
+      if (!container || isScrollingRef.current || !mouseOverContainerRef.current || isUserScrollingRef.current) return
       
       const rect = container.getBoundingClientRect()
       const mouseX = e.clientX - rect.left
@@ -52,24 +164,26 @@ function Portfolio() {
       const scrollRatio = Math.max(0, Math.min(1, mouseX / containerWidth))
       const targetScroll = scrollRatio * maxScroll
       
-      // Berechne dynamische Geschwindigkeit basierend auf Mausposition
-      // Am Rand schneller, in der Mitte langsamer
-      const normalizedX = mouseX / containerWidth // 0 bis 1
-      const distanceFromCenter = Math.abs(normalizedX - 0.5) * 2 // 0 (Mitte) bis 1 (Rand)
-      const speed = 0.5 + (distanceFromCenter * 0.7) // 0.5 (Mitte) bis 1.2 (Rand)
+      // Berechne dynamische Geschwindigkeit basierend auf Mausposition - sanfter und geschmeidiger
+      const normalizedX = mouseX / containerWidth
+      const distanceFromCenter = Math.abs(normalizedX - 0.5) * 2
+      // Reduzierte Geschwindigkeit: langsamer am Rand, sanfter Übergang
+      const speed = 0.3 + (distanceFromCenter * 0.3) // 0.3 (Mitte) bis 0.6 (Rand) - viel sanfter
       
-      // Sanftes Scrollen mit requestAnimationFrame
+      // Sanftes Scrollen mit requestAnimationFrame - geschmeidiger und sanfter
       const animate = () => {
-        if (!container) return
+        if (!container || isScrollingRef.current || !mouseOverContainerRef.current || isUserScrollingRef.current) return
         const currentScroll = container.scrollLeft
         const diff = targetScroll - currentScroll
         
-        if (Math.abs(diff) < 0.5) {
+        if (Math.abs(diff) < 0.1) {
           container.scrollLeft = targetScroll
           return
         }
         
-        container.scrollLeft += diff * speed
+        // Sanftere Interpolation mit easing
+        const easing = 0.1 + (speed * 0.05) // 0.1-0.15 für sanftere Bewegung
+        container.scrollLeft += diff * easing
         animationFrameId = requestAnimationFrame(animate)
       }
       
@@ -79,30 +193,99 @@ function Portfolio() {
       animationFrameId = requestAnimationFrame(animate)
     }
 
+    // Touch-Events für Handy-Wischen
+    const handleTouchStart = () => {
+      isUserScrollingRef.current = true
+    }
+
+    const handleTouchEnd = () => {
+      setTimeout(() => {
+        isUserScrollingRef.current = false
+      }, 150)
+    }
+
+    container.addEventListener('mouseenter', handleMouseEnter)
+    container.addEventListener('mouseleave', handleMouseLeave)
     container.addEventListener('mousemove', handleMouseMove)
+    container.addEventListener('scroll', handleScroll, { passive: true })
+    container.addEventListener('touchstart', handleTouchStart, { passive: true })
+    container.addEventListener('touchend', handleTouchEnd, { passive: true })
 
     return () => {
+      container.removeEventListener('mouseenter', handleMouseEnter)
+      container.removeEventListener('mouseleave', handleMouseLeave)
       container.removeEventListener('mousemove', handleMouseMove)
+      container.removeEventListener('scroll', handleScroll)
+      container.removeEventListener('touchstart', handleTouchStart)
+      container.removeEventListener('touchend', handleTouchEnd)
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId)
       }
+      if (scrollIntervalRef.current) {
+        clearTimeout(scrollIntervalRef.current)
+      }
     }
   }, [])
+
+  const getCardContent = (cardIndex: number, position: 'left' | 'middle' | 'right') => {
+    let originalIndex: number
+    
+    if (position === 'left') {
+      // Links: Card 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 (rückwärts)
+      originalIndex = 9 - cardIndex // 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+    } else if (position === 'middle') {
+      // Mitte: Card 1-10 (normal, Index 0-9)
+      originalIndex = cardIndex
+    } else {
+      // Rechts: Card 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 (vorwärts)
+      originalIndex = cardIndex // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    }
+    
+    const isCard3 = originalIndex === 2
+    const isCard4 = originalIndex === 3
+    const isCard5 = originalIndex === 4
+    const cardInfo = cardData[originalIndex]
+    
+    return {
+      isCard3,
+      isCard4,
+      isCard5,
+      cardInfo
+    }
+  }
 
   return (
     <section className="portfolio-section">
       <div ref={containerRef} className="portfolio-container">
         <div className="portfolio-grid">
-          {cards.map((cardNumber, index) => {
-            const isCard3 = index === 2
-            const isCard4 = index === 3
-            const isCard5 = index === 4
-            const cardInfo = cardData[index]
+          {infiniteCards.map((cardNumber, index) => {
+            // Bestimme Position basierend auf Index
+            let position: 'left' | 'middle' | 'right'
+            let cardIndex: number
+            
+            const leftCardsCount = 10 * repetitions
+            const middleCardsCount = 10 * repetitions
+            
+            if (index < leftCardsCount) {
+              // Links: Card 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 (rückwärts) - mehrmals
+              position = 'left'
+              cardIndex = index % 10 // Modulo für Wiederholung
+            } else if (index < leftCardsCount + middleCardsCount) {
+              // Mitte: Card 1-10 (normal) - mehrmals
+              position = 'middle'
+              cardIndex = (index - leftCardsCount) % 10
+            } else {
+              // Rechts: Card 1-10 (vorwärts) - mehrmals
+              position = 'right'
+              cardIndex = (index - leftCardsCount - middleCardsCount) % 10
+            }
+            
+            const { isCard3, isCard4, isCard5, cardInfo } = getCardContent(cardIndex, position)
             
             return (
               <div 
-                key={cardNumber} 
-                className={`card ${index === 0 ? 'first-card' : ''} ${index === cards.length - 1 ? 'last-card' : ''}`}
+                key={`${cardNumber}-${index}`} 
+                className="card"
               >
                 {isCard3 ? (
                   <img 

@@ -2,18 +2,16 @@ import './Menue.css'
 import Portfolio from './Portfolio'
 
 interface MenueProps {
-  onPortfolioClick?: () => void
-  portfolioOpen?: boolean
+  portfolioOpen: boolean
+  setPortfolioOpen: (open: boolean) => void
 }
 
-function Menue({ onPortfolioClick, portfolioOpen = false }: MenueProps) {
+function Menue({ portfolioOpen, setPortfolioOpen }: MenueProps) {
   const menuItems = ['about', 'portfolio', 'kontakt'];
 
   const handleClick = (item: string) => {
     if (item === 'portfolio') {
-      if (onPortfolioClick) {
-        onPortfolioClick()
-      }
+      setPortfolioOpen(!portfolioOpen)
     }
   }
 
