@@ -1,19 +1,25 @@
-/* Style Guide - Portfolio Farbpalette */
+/* Style Guide - BB Farbpalette */
 
 :root {
-  /* Primärfarben */
-  --color-signal: #e36255;
-  --color-coral: #ec9a86;
-  --color-sky: #a2c5c9;
-  --color-gold: #f3c262;
+  /* Mint-Farben */
+  --color-signal: #4dc3b5;
+  --color-coral: #7dd3c4;
+  --color-sky: #a0dfd1;
+  --color-gold: #c5ebe2;
+  --color-mint-5: #d8f2eb;
+  --color-mint-6: #ebf8f4;
 
-  /* Hintergrund */
-  --bg-primary: #f1e0ce;
-  --bg-secondary: #e8d5c0;
+  /* Hintergrund - Light Mode */
+  --bg-primary: #ffffff;
+  --bg-secondary: #ffffff;
   
-  /* Text */
-  --text-primary: #2a2a2a; /* Standard-Schriftfarbe (wie Menü) */
-  --text-secondary: rgba(42, 42, 42, 0.8);
+  /* Text - Light Mode */
+  --text-primary: #000000;
+  --text-secondary: rgba(0, 0, 0, 0.8);
+  
+  /* Icon & Scroll - Light Mode */
+  --icon-color: #000000;
+  --scroll-color: #000000;
   
   /* Spacing */
   --spacing-xs: 0.5rem;
@@ -29,64 +35,19 @@
   --font-weight-medium: 500;
 }
 
-/* Theme: Warm (Standard) */
-.theme-warm {
-  --color-signal: #e36255;
-  --color-coral: #ec9a86;
-  --color-sky: #a2c5c9;
-  --color-gold: #f3c262;
-  --bg-primary: #f1e0ce;
-  --bg-secondary: #e8d5c0;
-  --text-primary: #2a2a2a;
-  --text-secondary: rgba(42, 42, 42, 0.8);
-}
-
-/* Theme: Pigmentfarben */
-.theme-pigmentfarben {
-  --color-signal: #b2d6ca;
-  --color-coral: #fe5858;
-  --color-sky: #a2c5c9;
-  --color-gold: #5d353e;
-  --bg-primary: #ffffff;
-  --bg-secondary: #ffffff;
-  --text-primary: #2a2a2a;
-  --text-secondary: rgba(42, 42, 42, 0.8);
-}
-
-/* Theme: Soft */
-.theme-soft {
-  --color-signal: #e5edf8;
-  --color-coral: #e29e93;
-  --color-sky: #edbc7a;
-  --color-gold: #0384bd;
-  --bg-primary: #ffffff;
-  --bg-secondary: #ffffff;
-  --text-primary: #2a2a2a;
-  --text-secondary: rgba(42, 42, 42, 0.8);
-}
-
-/* Theme: Fresh */
-.theme-fresh {
-  --color-signal: #8ca6b3;
-  --color-coral: #87c488;
-  --color-sky: #aa6464;
-  --color-gold: #284651;
-  --bg-primary: #ffffff;
-  --bg-secondary: #ffffff;
-  --text-primary: #2a2a2a;
-  --text-secondary: rgba(42, 42, 42, 0.8);
-}
-
-/* Theme: Winterwald */
-.theme-winterwald {
-  --color-signal: #dbdbe5;
-  --color-coral: #a5b7c1;
-  --color-sky: #535d55;
-  --color-gold: #514644;
-  --bg-primary: #ffffff;
-  --bg-secondary: #ffffff;
-  --text-primary: #2a2a2a;
-  --text-secondary: rgba(42, 42, 42, 0.8);
+/* Dark Mode */
+.dark-mode {
+  /* Hintergrund - Dark Mode */
+  --bg-primary: #000000;
+  --bg-secondary: #000000;
+  
+  /* Text - Dark Mode */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  
+  /* Icon & Scroll - Dark Mode */
+  --icon-color: #ffffff;
+  --scroll-color: #ffffff;
 }
 
 /* Utility Classes für Farben */

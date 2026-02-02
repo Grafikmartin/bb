@@ -16,20 +16,19 @@
 .scroll-hint-text {
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-primary, #2a2a2a);
+  color: var(--scroll-color, #000000);
   text-transform: lowercase;
   white-space: nowrap;
-  transition: transform 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .scroll-hint-arrow {
   font-size: 1.5rem;
   font-weight: 900;
-  color: var(--color-signal, #e36255);
+  color: var(--scroll-color, #000000);
   animation: arrow-bounce 2s ease-in-out infinite;
-  transition: transform 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
   line-height: 1;
-  text-shadow: 0 0 2px rgba(227, 98, 85, 0.3);
 }
 
 .scroll-hint.bouncing {

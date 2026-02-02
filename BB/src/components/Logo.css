@@ -1,0 +1,49 @@
+.logo-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: var(--spacing-xl, 4rem);
+  padding-bottom: var(--spacing-lg, 4rem);
+  position: relative;
+  z-index: 10;
+  margin-top: var(--spacing-lg, 3rem);
+}
+
+.logo-image {
+  width: 100%;
+  max-width: 2000px;
+  height: auto;
+  display: block;
+  margin-bottom: var(--spacing-lg, 4rem);
+  align-self: center;
+}
+
+.logo-text {
+  text-align: left;
+  width: calc(47vw - 4rem);
+  max-width: calc(100vw - 49vw - 4vw);
+  padding: 0 2rem 0 0;
+  margin-left: 49vw;
+  box-sizing: border-box;
+}
+
+.logo-text p {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--text-primary, #000000);
+  margin: 0 0 var(--spacing-md, 2rem) 0;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.logo-text p.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.logo-text p:last-child {
+  margin-bottom: 0;
+}
