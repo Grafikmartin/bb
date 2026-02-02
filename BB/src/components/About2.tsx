@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import './About.css'
+import './About2.css'
 import aboutImage from '../assets/image.png'
 
-function About() {
+function About2() {
   const [visibleParagraphs, setVisibleParagraphs] = useState<boolean[]>([false, false, false, false, false, false])
   const [showMore, setShowMore] = useState(false)
   const paragraphRefs = useRef<(HTMLParagraphElement | null)[]>([])
@@ -63,14 +63,14 @@ function About() {
   return (
     <section 
       ref={aboutSectionRef}
-      className="about-section"
+      className="about2-section"
     >
       <img 
         src={aboutImage} 
         alt="Benjamin Borth" 
-        className="about-image"
+        className="about2-image"
       />
-      <div className="about-text">
+      <div className="about2-text">
         <p 
           ref={(el) => { paragraphRefs.current[0] = el }}
           className={visibleParagraphs[0] ? 'visible' : ''}
@@ -124,4 +124,4 @@ function About() {
   )
 }
 
-export default About
+export default About2

@@ -1,7 +1,9 @@
 import './App.css'
 import Aufmacher from './components/Aufmacher'
 import Logo from './components/Logo'
+import Einfuehrungstext from './components/Einfuehrungstext'
 import About from './components/About'
+import About2 from './components/About2'
 import Leistungen from './components/Leistungen'
 import Kontakt from './components/Kontakt'
 import ScrollHint from './components/ScrollHint'
@@ -17,7 +19,9 @@ function App() {
         </div>
       </section>
       <Logo />
+      <Einfuehrungstext />
       <About />
+      <About2 />
       <Leistungen />
       <Kontakt />
       <Footer />
