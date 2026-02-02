@@ -1,0 +1,102 @@
+/* Style Guide - Portfolio Farbpalette */
+
+:root {
+  /* Primärfarben */
+  --color-signal: #e36255;
+  --color-coral: #ec9a86;
+  --color-sky: #a2c5c9;
+  --color-gold: #f3c262;
+
+  /* Hintergrund */
+  --bg-primary: #f1e0ce;
+  --bg-secondary: #e8d5c0;
+  
+  /* Text */
+  --text-primary: #2a2a2a; /* Standard-Schriftfarbe (wie Menü) */
+  --text-secondary: rgba(42, 42, 42, 0.8);
+  
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+  --spacing-xl: 6rem;
+  
+  /* Typography */
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-hero: clamp(3rem, 8vw, 8rem);
+  --font-weight-bold: 700;
+  --font-weight-medium: 500;
+}
+
+/* Theme: Warm (Standard) */
+.theme-warm {
+  --color-signal: #e36255;
+  --color-coral: #ec9a86;
+  --color-sky: #a2c5c9;
+  --color-gold: #f3c262;
+  --bg-primary: #f1e0ce;
+  --bg-secondary: #e8d5c0;
+  --text-primary: #2a2a2a;
+  --text-secondary: rgba(42, 42, 42, 0.8);
+}
+
+/* Theme: Pigmentfarben */
+.theme-pigmentfarben {
+  --color-signal: #b2d6ca;
+  --color-coral: #fe5858;
+  --color-sky: #a2c5c9;
+  --color-gold: #5d353e;
+  --bg-primary: #ffffff;
+  --bg-secondary: #ffffff;
+  --text-primary: #2a2a2a;
+  --text-secondary: rgba(42, 42, 42, 0.8);
+}
+
+/* Theme: Soft */
+.theme-soft {
+  --color-signal: #e5edf8;
+  --color-coral: #e29e93;
+  --color-sky: #edbc7a;
+  --color-gold: #0384bd;
+  --bg-primary: #ffffff;
+  --bg-secondary: #ffffff;
+  --text-primary: #2a2a2a;
+  --text-secondary: rgba(42, 42, 42, 0.8);
+}
+
+/* Theme: Fresh */
+.theme-fresh {
+  --color-signal: #8ca6b3;
+  --color-coral: #87c488;
+  --color-sky: #aa6464;
+  --color-gold: #284651;
+  --bg-primary: #ffffff;
+  --bg-secondary: #ffffff;
+  --text-primary: #2a2a2a;
+  --text-secondary: rgba(42, 42, 42, 0.8);
+}
+
+/* Theme: Winterwald */
+.theme-winterwald {
+  --color-signal: #dbdbe5;
+  --color-coral: #a5b7c1;
+  --color-sky: #535d55;
+  --color-gold: #514644;
+  --bg-primary: #ffffff;
+  --bg-secondary: #ffffff;
+  --text-primary: #2a2a2a;
+  --text-secondary: rgba(42, 42, 42, 0.8);
+}
+
+/* Utility Classes für Farben */
+.color-signal { color: var(--color-signal); }
+.color-coral { color: var(--color-coral); }
+.color-sky { color: var(--color-sky); }
+.color-gold { color: var(--color-gold); }
+
+.bg-signal { background-color: var(--color-signal); }
+.bg-coral { background-color: var(--color-coral); }
+.bg-sky { background-color: var(--color-sky); }
+.bg-gold { background-color: var(--color-gold); }
+

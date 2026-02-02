@@ -1,0 +1,237 @@
+.portfolio-section {
+  width: 100vw;
+  margin: 0;
+  padding: var(--spacing-md, 2rem) 0;
+  background: var(--bg-primary, #f1e0ce);
+  animation: fadeIn 0.8s ease-out;
+  overflow-x: hidden;
+  overflow-y: visible;
+  box-sizing: border-box;
+  position: relative;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.portfolio-container {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+  /* Besseres Touch-Scrolling auf mobilen Geräten */
+  -webkit-overflow-scrolling: touch;
+  /* Verstecke Scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.portfolio-container::-webkit-scrollbar {
+  display: none;
+}
+
+.portfolio-grid {
+  display: flex;
+  gap: var(--spacing-md, 2rem);
+  align-items: flex-start;
+  width: max-content;
+  padding: 0;
+}
+
+.card {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  border: 1px solid var(--color-signal, #e36255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: none;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex-shrink: 0;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.card svg {
+  width: 48px;
+  fill: #333;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card .card-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card .card-icon-full {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  border-radius: 10px;
+  z-index: 0;
+}
+
+.card:hover {
+  box-shadow: none;
+  border: 1px solid var(--color-signal, #e36255);
+  border-radius: 10px;
+}
+
+.card__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f2f2f2;
+  transform: rotateX(-90deg);
+  transform-origin: bottom;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  backface-visibility: hidden;
+  opacity: 0;
+}
+
+.card:hover .card__content {
+  transform: rotateX(0deg);
+  opacity: 1;
+}
+
+.card__title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 700;
+}
+
+.card:hover svg,
+.card:hover .card-icon,
+.card:hover .card-icon-full {
+  scale: 0;
+}
+
+.card__description {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: #777;
+  line-height: 1.4;
+}
+
+.first-card {
+  margin-left: 0;
+}
+
+.last-card {
+  margin-right: 0;
+}
+
+/* Media Queries für responsive Design */
+
+/* Kleine Handys (bis 480px) */
+@media (max-width: 480px) {
+  .card {
+    width: 140px;
+    height: 200px;
+  }
+  
+  .card__title {
+    font-size: 18px;
+  }
+  
+  .card__description {
+    font-size: 11px;
+  }
+  
+  .portfolio-grid {
+    gap: var(--spacing-sm, 1rem);
+  }
+  
+  .portfolio-section {
+    padding: var(--spacing-sm, 1rem) 0;
+  }
+}
+
+/* Große Handys / kleine Tablets (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .card {
+    width: 160px;
+    height: 240px;
+  }
+  
+  .card__title {
+    font-size: 20px;
+  }
+  
+  .card__description {
+    font-size: 12px;
+  }
+  
+  .portfolio-grid {
+    gap: var(--spacing-sm, 1rem);
+  }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .card {
+    width: 180px;
+    height: 270px;
+  }
+  
+  .card__title {
+    font-size: 22px;
+  }
+}
+
+/* Desktop (1025px - 1440px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .card {
+    width: 200px;
+    height: 300px;
+  }
+}
+
+/* Große Bildschirme (ab 1441px) */
+@media (min-width: 1441px) {
+  .card {
+    width: 220px;
+    height: 330px;
+  }
+  
+  .card__title {
+    font-size: 26px;
+  }
+  
+  .card__description {
+    font-size: 15px;
+  }
+  
+  .portfolio-grid {
+    gap: var(--spacing-lg, 4rem);
+  }
+}
