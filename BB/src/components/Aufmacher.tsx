@@ -421,13 +421,19 @@ function Aufmacher() {
           
           // Prüfe ob dieser Kreis zu den speziellen Bereichen gehört (nur nach dem Klick)
           if (isFading && isLightColorArea(index)) {
-            // Nur hellste Farben für spezielle Bereiche
+            // Hellste Farben für spezielle Bereiche + gelegentlich Weiß
             const lightestColors = ['#d8f2eb', '#ebf8f4']; // --color-mint-5 und --color-mint-6
             const currentColor = prevColors[index];
-            const availableWithoutCurrent = lightestColors.filter(c => c !== currentColor);
-            if (availableWithoutCurrent.length > 0) {
-              const randomIndex = Math.floor(Math.random() * availableWithoutCurrent.length);
-              newColors[index] = availableWithoutCurrent[randomIndex];
+            
+            // 20% Chance für Weiß, 80% für hellste Farben
+            if (Math.random() < 0.2) {
+              newColors[index] = '#ffffff';
+            } else {
+              const availableWithoutCurrent = lightestColors.filter(c => c !== currentColor);
+              if (availableWithoutCurrent.length > 0) {
+                const randomIndex = Math.floor(Math.random() * availableWithoutCurrent.length);
+                newColors[index] = availableWithoutCurrent[randomIndex];
+              }
             }
             return newColors;
           }
@@ -530,13 +536,21 @@ function Aufmacher() {
             availableColors = allColors;
           }
           
-          // Für innere Kreise (nach dem Klick): Füge weiß mit 1:4 Wahrscheinlichkeit hinzu
+          // Für alle sichtbaren Kreise nach dem Klick: Füge weiß immer hinzu
           const centerIndices = getCenterCircleIndices();
-          if (centerIndices.has(index) && !isLightColorArea(index) && !isOuterRowArea(index)) {
-            // 1:4 Verhältnis = 25% Chance für weiß
-            if (Math.random() < 0.25) {
-              // Füge weiß zu den verfügbaren Farben hinzu
-              availableColors = [...availableColors, '#ffffff'];
+          if (centerIndices.has(index)) {
+            // Füge weiß zu den verfügbaren Farben hinzu
+            availableColors = [...availableColors, '#ffffff'];
+            
+            // Für innere Kreise: 30% Chance für Weiß
+            if (!isLightColorArea(index) && !isOuterRowArea(index)) {
+              if (Math.random() < 0.3) {
+                const currentColor = prevColors[index];
+                if (currentColor !== '#ffffff') {
+                  newColors[index] = '#ffffff';
+                  return newColors;
+                }
+              }
             }
           }
           
@@ -666,6 +680,20 @@ function Aufmacher() {
           );
         })}
       </div>
+      {/* Senkrechter schwarzer Strich zwischen Punkten und Schrift */}
+      <div
+        style={{
+          position: 'absolute',
+          left: `${textLeft - 32}px`, // Etwas links von der Schrift (2rem = 32px)
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '2px',
+          height: `${2 * (9 * diameter + 8 * gap)}px`, // Doppelt so lang wie die Höhe der 9 sichtbaren Reihen
+          backgroundColor: '#000000',
+          zIndex: 9999,
+          pointerEvents: 'none',
+        }}
+      />
       <div 
         className="aufmacher-name"
         style={{
