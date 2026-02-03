@@ -687,7 +687,7 @@ function Aufmacher() {
       >
         <div
           style={{
-            fontSize: 'clamp(1.6rem, 4vw, 3.2rem)',
+            fontSize: 'clamp(1.92rem, 4.8vw, 3.84rem)',
             fontWeight: 400,
             letterSpacing: '0.05em',
             lineHeight: 1.2,
@@ -701,10 +701,11 @@ function Aufmacher() {
         </div>
         <div
           style={{
-            fontSize: 'clamp(0.99rem, 2.2vw, 1.32rem)',
+            fontSize: 'clamp(1.188rem, 2.64vw, 1.584rem)',
             fontWeight: 200,
             letterSpacing: '0.02em',
             marginTop: '0.25rem',
+            marginLeft: '0.15em',
             lineHeight: 1.4,
             color: '#000000',
             textShadow: 'none',
@@ -716,13 +717,15 @@ function Aufmacher() {
         </div>
         <div
           style={{
-            fontSize: 'clamp(0.99rem, 2.2vw, 1.32rem)',
+            fontSize: 'clamp(1.188rem, 2.64vw, 1.584rem)',
             fontWeight: 200,
             letterSpacing: '0.02em',
+            marginLeft: '0.15em',
             lineHeight: 1.4,
             color: '#000000',
             textShadow: 'none',
             textAlign: 'left',
+            whiteSpace: 'nowrap',
           }}
         >
           und Hypnosetherapeut
