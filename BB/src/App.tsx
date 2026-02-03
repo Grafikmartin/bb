@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import './App.css'
 import Aufmacher from './components/Aufmacher'
 import Einfuehrungstext from './components/Einfuehrungstext'
@@ -10,6 +11,34 @@ import Footer from './components/Footer'
 import CursorFollower from './components/CursorFollower'
 
 function App() {
+  const [canScroll, setCanScroll] = useState(false)
+  const [showScrollHint, setShowScrollHint] = useState(false)
+
+  // Verhindere Scrollen während der Animation
+  useEffect(() => {
+    if (!canScroll) {
+      // Verhindere Scrollen
+      document.body.style.overflow = 'hidden'
+    } else {
+      // Erlaube Scrollen
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [canScroll])
+
+  // Prüfe ob Animation beendet ist (nach 2 Sekunden Fade-in + 500ms für Click-Hint)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCanScroll(true)
+      setShowScrollHint(true)
+    }, 2500) // 2 Sekunden Fade-in + 500ms Pause
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <div className="app">
       <section className="aufmacher-section">
@@ -23,7 +52,7 @@ function App() {
       <Leistungen />
       <Kontakt />
       <Footer />
-      <ScrollHint />
+      {showScrollHint && <ScrollHint />}
       <CursorFollower />
     </div>
   )
