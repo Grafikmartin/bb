@@ -5,6 +5,8 @@ import aboutImage from '../assets/image.png'
 function About() {
   const [visibleParagraphs, setVisibleParagraphs] = useState<boolean[]>([false, false, false, false, false, false])
   const [showMore, setShowMore] = useState(false)
+  const [scale, setScale] = useState(0.7)
+  const [isScrolling, setIsScrolling] = useState(false)
   const paragraphRefs = useRef<(HTMLParagraphElement | null)[]>([])
   const aboutSectionRef = useRef<HTMLElement | null>(null)
 
@@ -60,10 +62,52 @@ function About() {
     }
   }, [showMore])
 
+  // Scale-Animation beim Scrollen (wie Einführungstext)
+  useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout
+
+    const updateScale = () => {
+      const scrollY = window.scrollY
+      const viewportHeight = window.innerHeight
+      
+      // Berechne Scroll-Progress ab Leistungen (ab 200vh)
+      // Scale von 0.7 (70%) auf 1.0 (100%) während des Scrollens
+      const scrollProgress = Math.min(Math.max((scrollY - viewportHeight * 2) / viewportHeight, 0), 1)
+      const newScale = 0.7 + (scrollProgress * 0.3)
+      setScale(newScale)
+    }
+
+    const handleScroll = () => {
+      if (!isScrolling) {
+        setIsScrolling(true)
+      }
+      
+      clearTimeout(scrollTimeout)
+      updateScale()
+      
+      scrollTimeout = setTimeout(() => {
+        setIsScrolling(false)
+        updateScale()
+      }, 100)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      clearTimeout(scrollTimeout)
+    }
+  }, [isScrolling])
+
   return (
     <section 
       ref={aboutSectionRef}
       className="about-section"
+      style={{
+        transform: `scale(${scale})`,
+        transformOrigin: 'top center',
+        transition: isScrolling ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+      }}
     >
       <img 
         src={aboutImage} 

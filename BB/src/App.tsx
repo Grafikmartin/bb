@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import Aufmacher from './components/Aufmacher'
+import Video from './components/Video'
 import Einfuehrungstext from './components/Einfuehrungstext'
 import About from './components/About'
-import About2 from './components/About2'
+import Praxis from './components/Praxis'
 import Leistungen from './components/Leistungen'
 import Kontakt from './components/Kontakt'
 import ScrollHint from './components/ScrollHint'
@@ -46,10 +47,11 @@ function App() {
           <Aufmacher />
         </div>
       </section>
+      <Video />
       <Einfuehrungstext />
-      <About />
-      <About2 />
       <Leistungen />
+      <About />
+      <Praxis />
       <Kontakt />
       <Footer />
       {showScrollHint && <ScrollHint />}

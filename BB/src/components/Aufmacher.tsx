@@ -845,14 +845,15 @@ function Aufmacher() {
         onTouchStart={handleInteraction}
         style={{ cursor: isFading || isAnimating ? 'default' : 'pointer', position: 'relative' }}
       >
-      {showClickHint && !isFading && (
+      {/* Render Klick-Button mit Portal direkt in body, damit er über den Punkten liegt */}
+      {showClickHint && !isFading && typeof document !== 'undefined' && createPortal(
         <div 
           style={{
             position: 'fixed',
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            zIndex: 100000,
+            zIndex: 400, // Höher als Punkte (300), damit Button darüber liegt
             pointerEvents: 'none',
             textAlign: 'center',
             color: clickHintColor,
@@ -872,7 +873,8 @@ function Aufmacher() {
           }}
         >
           Klicken
-        </div>
+        </div>,
+        document.body
       )}
       {/* Senkrechter schwarzer Strich zwischen Punkten und Schrift */}
       {showLine && (

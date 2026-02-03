@@ -1,0 +1,33 @@
+.praxis-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: var(--color-coral, #7dd3c4);
+  padding: var(--spacing-xl, 4rem) 0;
+  position: relative;
+  z-index: 100; /* Höher als Strich und Text (40), aber niedriger als Punkte (250) */
+  margin-top: 0; /* Direkt nach About */
+}
+
+.praxis-text {
+  text-align: left;
+  width: calc(47vw - 4rem);
+  max-width: calc(100vw - 49vw - 4vw);
+  padding: 0 2rem var(--spacing-xl, 4rem) 0;
+  left: 49vw;
+  margin-top: var(--spacing-xl, 4rem);
+  box-sizing: border-box;
+  position: relative;
+}
+
+.praxis-text p {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--text-primary, #000000);
+  margin: 0 0 var(--spacing-md, 2rem) 0;
+}
+
+.praxis-text p:last-child {
+  margin-bottom: 0;
+}

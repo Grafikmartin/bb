@@ -3,9 +3,11 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  background-color: var(--color-coral, #7dd3c4);
+  background-color: var(--color-coral, #7dd3c4); /* Mint-Hintergrund */
   padding: var(--spacing-xl, 4rem) 0;
   position: relative;
+  z-index: 350; /* Höher als Punkte (300), damit About über den Punkten liegt */
+  margin-top: 0; /* Direkt nach Leistungen */
 }
 
 .about-image {

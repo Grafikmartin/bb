@@ -1,22 +1,44 @@
 .leistungen-section {
-  width: 100%;
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #ffffff;
-  padding: var(--spacing-lg, 4rem) var(--spacing-md, 2rem);
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: #ffffff; /* Weißer Hintergrund */
+  padding: var(--spacing-xl, 4rem) 0;
+  position: relative;
+  z-index: 100; /* Höher als Strich und Text (40), aber niedriger als Punkte (250) */
+  margin-top: 0; /* Direkt nach Einführungstext */
 }
 
-.leistungen-content {
-  max-width: 1200px;
-  width: 100%;
+.leistungen-text {
+  text-align: left;
+  width: calc(47vw - 4rem);
+  max-width: calc(100vw - 49vw - 4vw);
+  padding: 0 2rem var(--spacing-xl, 4rem) 0;
+  left: 49vw;
+  margin-top: var(--spacing-xl, 4rem);
+  box-sizing: border-box;
+  position: relative;
 }
 
-.leistungen-title {
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 500;
-  text-transform: lowercase;
+.leistungen-text h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
   color: var(--text-primary, #000000);
-  margin: 0;
+  margin: var(--spacing-xl, 4rem) 0 var(--spacing-md, 2rem) 0;
+}
+
+.leistungen-text h2:first-child {
+  margin-top: 0;
+}
+
+.leistungen-text p {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--text-primary, #000000);
+  margin: 0 0 var(--spacing-md, 2rem) 0;
+}
+
+.leistungen-text p:last-child {
+  margin-bottom: 0;
 }
