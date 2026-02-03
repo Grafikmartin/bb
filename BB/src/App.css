@@ -1,6 +1,6 @@
 .app {
   width: 100%;
-  background: var(--bg-primary);
+  background: var(--bg-primary, #ffffff);
   position: relative;
   min-height: 100vh;
   display: flex;

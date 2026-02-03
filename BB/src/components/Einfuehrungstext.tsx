@@ -52,10 +52,10 @@ function Einfuehrungstext() {
     <section 
       className="einfuehrungstext-section"
       style={{
-        // Entferne Transform wenn sticky, damit sticky-Positionierung funktioniert
         transform: isSticky ? 'none' : `scale(${scale})`,
         transformOrigin: 'top center',
         transition: isScrolling || isSticky ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        willChange: isSticky ? 'auto' : 'transform',
       }}
     >
       <div
