@@ -88,7 +88,9 @@ function Aufmacher() {
   const [showLine, setShowLine] = useState(false);
   const [typingText, setTypingText] = useState({ line1: '', line2: '', line3: '' });
   const [circleOpacities, setCircleOpacities] = useState<number[]>(() => {
-    return Array.from({ length: totalCircles }, () => 0); // Starten mit opacity 0
+    // Initialisiere mit totalCircles, aber verwende dimensions falls totalCircles noch 0 ist
+    const initialLength = totalCircles > 0 ? totalCircles : (dimensions.cols * dimensions.rows);
+    return Array.from({ length: initialLength }, () => 0); // Starten mit opacity 0
   });
   const [fadeOutOpacities, setFadeOutOpacities] = useState<number[]>(() => {
     return Array.from({ length: totalCircles }, () => 1); // Starten mit opacity 1
@@ -148,6 +150,8 @@ function Aufmacher() {
   
   // Aktualisiere circlePositions und visibleCircles wenn sich totalCircles ändert
   useEffect(() => {
+    if (totalCircles === 0) return; // Verhindere Division durch Null
+    
     // Setze alle Kreise sofort auf ihre richtige Position (0, 0)
     setCirclePositions(Array.from({ length: totalCircles }, () => ({ x: 0, y: 0 })));
     setVisibleCircles(Array.from({ length: totalCircles }, () => true));
@@ -195,6 +199,7 @@ function Aufmacher() {
       }
     };
     
+    // Starte Animation sofort
     requestAnimationFrame(fadeIn);
   }, [totalCircles]);
 

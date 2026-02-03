@@ -6,6 +6,7 @@ function Video() {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout
@@ -13,8 +14,21 @@ function Video() {
     const viewportHeight = window.innerHeight
     const stickyPoint = viewportHeight // Video wird sticky bei 100vh
 
+    // Initiale Prüfung beim Mount - Video ist immer versteckt am Anfang
+    setIsVisible(false)
+
     const updateScale = () => {
       const scrollY = window.scrollY
+      
+      // Video wird sichtbar, sobald gescrollt wird (erscheint von unten)
+      // Aber nur wenn wir noch nicht beim sticky-Punkt sind oder darüber
+      if (scrollY > 0 && scrollY < stickyPoint) {
+        setIsVisible(true)
+      } else if (scrollY >= stickyPoint) {
+        setIsVisible(true) // Bleibt sichtbar wenn sticky
+      } else {
+        setIsVisible(false) // Verschwindet wieder wenn zurück gescrollt wird
+      }
       
       // Prüfe ob Komponente sticky werden sollte (bei 100vh)
       if (scrollY >= stickyPoint) {
@@ -22,7 +36,7 @@ function Video() {
         setScale(1.0) // Scale bleibt bei 1.0 wenn sticky
       } else {
         setIsSticky(false)
-        // Komponente scrollt noch - Scale-Animation läuft
+        // Komponente scrollt noch - Scale-Animation läuft von 70% auf 100%
         const scrollProgress = Math.min(scrollY / stickyPoint, 1)
         const newScale = 0.7 + (scrollProgress * 0.3)
         setScale(newScale)
@@ -30,26 +44,6 @@ function Video() {
     }
 
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      
-      // Wenn sticky und versucht nach oben zu scrollen, verhindere das
-      if (isSticky && currentScrollY < stickyPoint) {
-        window.scrollTo({
-          top: stickyPoint,
-          behavior: 'auto'
-        })
-        return
-      }
-      
-      // Wenn sticky und versucht weiter nach oben zu scrollen, halte Position fest
-      if (isSticky && currentScrollY > stickyPoint) {
-        window.scrollTo({
-          top: stickyPoint,
-          behavior: 'auto'
-        })
-        return
-      }
-      
       if (!isScrolling) {
         setIsScrolling(true)
       }
@@ -62,7 +56,7 @@ function Video() {
         updateScale()
       }, 100)
       
-      lastScrollY = currentScrollY
+      lastScrollY = window.scrollY
     }
 
     window.addEventListener('scroll', handleScroll, { passive: false })
@@ -77,10 +71,18 @@ function Video() {
     <section 
       className="video-section"
       style={{
-        transform: isSticky ? 'none' : `scale(${scale})`,
+        transform: isSticky 
+          ? 'none' 
+          : isVisible 
+            ? `scale(${scale}) translateY(0)` 
+            : `scale(${scale}) translateY(100vh)`,
         transformOrigin: 'top center',
         transition: isScrolling || isSticky ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         willChange: isSticky ? 'auto' : 'transform',
+        opacity: isVisible ? 1 : 0,
+        visibility: isVisible ? 'visible' : 'hidden',
+        pointerEvents: isVisible ? 'auto' : 'none',
+        zIndex: isSticky ? 100 : 100, // Video bleibt bei z-index 100, Einführungstext (110) schiebt sich darüber
       }}
     >
       <div
