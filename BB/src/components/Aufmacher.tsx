@@ -88,7 +88,9 @@ function Aufmacher() {
   const [showLine, setShowLine] = useState(false);
   const [typingText, setTypingText] = useState({ line1: '', line2: '', line3: '' });
   const [circleOpacities, setCircleOpacities] = useState<number[]>(() => {
-    return Array.from({ length: totalCircles }, () => 0); // Starten mit opacity 0
+    // Starte mit opacity 1, damit Punkte sofort sichtbar sind
+    // Die Animation wird trotzdem von 0.01 auf 1.0 laufen
+    return Array.from({ length: totalCircles }, () => 1); // Starten mit opacity 1 für sofortige Sichtbarkeit
   });
   const [fadeOutOpacities, setFadeOutOpacities] = useState<number[]>(() => {
     return Array.from({ length: totalCircles }, () => 1); // Starten mit opacity 1
@@ -154,58 +156,35 @@ function Aufmacher() {
     setCirclePositions(Array.from({ length: totalCircles }, () => ({ x: 0, y: 0 })));
     setVisibleCircles(Array.from({ length: totalCircles }, () => true));
     
-    // Alle Kreise sanft innerhalb von 2 Sekunden erscheinen lassen (von transparent zu sichtbar)
-    // Starte mit einer minimalen Opacity, damit sie sofort sichtbar sind
-    setCircleOpacities(Array.from({ length: totalCircles }, () => 0.01));
-    const fadeInDuration = 2000; // 2 Sekunden
-    const startTime = Date.now();
+    // Punkte sind bereits sichtbar (opacity 1), setze Animation auf false
+    setIsAnimating(false);
+    setCircleOpacities(Array.from({ length: totalCircles }, () => 1.0));
     
-    const fadeIn = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / fadeInDuration, 1);
-      
-      // Interpoliere von 0.01 zu 1.0 für smooth fade-in
-      const opacity = 0.01 + (progress * 0.99);
-      setCircleOpacities(Array.from({ length: totalCircles }, () => opacity));
-      
-      if (progress < 1) {
-        requestAnimationFrame(fadeIn);
-      } else {
-        // Nach dem Fade-in: Animation beenden und Klickaufforderung anzeigen
-        setIsAnimating(false);
-        // Stelle sicher, dass alle Opacities auf 1.0 sind
-        setCircleOpacities(Array.from({ length: totalCircles }, () => 1.0));
-        setTimeout(() => {
-          setShowClickHint(true);
-          // Starte Farbwechsel für den Klickbutton - nur dunkle Mint-Töne
-          const mintColors = getMintColors();
-          // Nur die ersten 3 dunklen Mint-Töne verwenden (signal, coral, sky)
-          const darkMintColors = mintColors.slice(0, 3);
-          const initialColorIndex = Math.floor(Math.random() * darkMintColors.length);
-          setClickHintColor(darkMintColors[initialColorIndex]);
-          
-          const colorInterval = setInterval(() => {
-            if (!isFading) {
-              setClickHintColor(prevColor => {
-                const availableColors = darkMintColors.filter(c => c !== prevColor);
-                if (availableColors.length > 0) {
-                  const randomIndex = Math.floor(Math.random() * availableColors.length);
-                  return availableColors[randomIndex];
-                }
-                return prevColor;
-              });
-            } else {
-              clearInterval(colorInterval);
-            }
-          }, 1500); // Wechsle alle 1.5 Sekunden
-        }, 500);
-      }
-    };
-    
-    // Starte Animation sofort mit einem kleinen Delay, damit React fertig gerendert hat
+    // Zeige Klickaufforderung nach kurzer Verzögerung
     setTimeout(() => {
-      requestAnimationFrame(fadeIn);
-    }, 50);
+      setShowClickHint(true);
+      // Starte Farbwechsel für den Klickbutton - nur dunkle Mint-Töne
+      const mintColors = getMintColors();
+      // Nur die ersten 3 dunklen Mint-Töne verwenden (signal, coral, sky)
+      const darkMintColors = mintColors.slice(0, 3);
+      const initialColorIndex = Math.floor(Math.random() * darkMintColors.length);
+      setClickHintColor(darkMintColors[initialColorIndex]);
+      
+      const colorInterval = setInterval(() => {
+        if (!isFading) {
+          setClickHintColor(prevColor => {
+            const availableColors = darkMintColors.filter(c => c !== prevColor);
+            if (availableColors.length > 0) {
+              const randomIndex = Math.floor(Math.random() * availableColors.length);
+              return availableColors[randomIndex];
+            }
+            return prevColor;
+          });
+        } else {
+          clearInterval(colorInterval);
+        }
+      }, 1500); // Wechsle alle 1.5 Sekunden
+    }, 500);
   }, [totalCircles]);
 
 
