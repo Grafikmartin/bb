@@ -63,9 +63,17 @@ function Aufmacher() {
     return { diameter, gap, cols, rows };
   };
   
-  const [dimensions, setDimensions] = useState(() => getCircleDimensions());
+  const [dimensions, setDimensions] = useState(() => {
+    // Stelle sicher, dass wir immer gültige Dimensionen haben
+    const dims = getCircleDimensions();
+    // Fallback falls cols oder rows 0 sind
+    if (dims.cols === 0 || dims.rows === 0) {
+      return { diameter: 25, gap: 2.5, cols: 48, rows: 38 };
+    }
+    return dims;
+  });
   const { cols, rows } = dimensions;
-  const totalCircles = cols * rows;
+  const totalCircles = Math.max(cols * rows, 1); // Mindestens 1 Kreis
 
 
   // Initiale Farben: Alle Punkte bekommen zufällige Minttöne + Weiß
@@ -138,10 +146,21 @@ function Aufmacher() {
     return () => window.removeEventListener('resize', calculateTextPosition);
   }, [cols, dimensions]);
 
-  // Aktualisiere Dimensionen bei Fenstergrößenänderung
+  // Aktualisiere Dimensionen bei Fenstergrößenänderung und beim ersten Render
   useEffect(() => {
+    const updateDimensions = () => {
+      const dims = getCircleDimensions();
+      // Fallback falls cols oder rows 0 sind
+      if (dims.cols > 0 && dims.rows > 0) {
+        setDimensions(dims);
+      }
+    };
+    
+    // Aktualisiere sofort beim ersten Render
+    updateDimensions();
+    
     const handleResize = () => {
-      setDimensions(getCircleDimensions());
+      updateDimensions();
     };
     
     window.addEventListener('resize', handleResize);
