@@ -6,7 +6,7 @@
   background-color: var(--color-coral, #7dd3c4);
   padding: var(--spacing-xl, 4rem) 0;
   position: relative;
-  z-index: 10;
+  z-index: 100; /* Höher als Strich und Text (40), aber niedriger als Punkte (250) */
   margin-top: 100vh; /* Platzhalter für den fixierten Aufmacher */
 }
 

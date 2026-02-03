@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import '../App.css'
 import './Aufmacher.css'
 
@@ -780,17 +781,74 @@ function Aufmacher() {
   const containerWidth = cols * diameter + (cols - 1) * gap;
   const containerHeight = rows * diameter + (rows - 1) * gap;
 
-  return (
+  // Render Punkte mit Portal direkt in body, außerhalb aller Container
+  const circlesElement = (
     <div 
-      className="aufmacher-wrapper"
+      className="circles-container"
+      style={{
+        width: `${containerWidth}px`,
+        height: `${containerHeight}px`,
+        display: 'grid',
+        gridTemplateColumns: `repeat(${cols}, ${diameter}px)`,
+        gridTemplateRows: `repeat(${rows}, ${diameter}px)`,
+        gap: `${gap}px`,
+        justifyContent: 'center',
+        alignContent: 'center',
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        zIndex: 300, // Sehr hoch, damit Punkte über Einführungstext (100) bleiben
+        pointerEvents: 'auto', // Erlaube Klicks auf die Punkte
+      }}
       onClick={handleInteraction}
       onTouchStart={handleInteraction}
-      style={{ cursor: isFading || isAnimating ? 'default' : 'pointer', position: 'relative' }}
     >
+      {Array.from({ length: totalCircles }, (_, index) => {
+        const position = circlePositions[index] || { x: 0, y: 0 };
+        const isVisible = visibleCircles[index] !== false;
+        return (
+          <div
+            key={index}
+            className="circle"
+            style={{ 
+              width: `${diameter}px`,
+              height: `${diameter}px`,
+              borderRadius: '50%',
+              backgroundColor: circleColors[index],
+              transition: isAnimating 
+                ? 'none' 
+                : 'background-color 1s ease-in-out, opacity 0.5s ease-in-out, transform 0.3s ease-out',
+              opacity: isAnimating 
+                ? (circleOpacities[index] || 0) 
+                : isFading 
+                  ? (fadeOutOpacities[index] !== undefined ? fadeOutOpacities[index] : (isVisible ? 1 : 0))
+                  : (isVisible ? 1 : 0),
+              transform: `translate(${position.x}px, ${position.y}px)`,
+              pointerEvents: isVisible ? 'auto' : 'none',
+              position: 'relative',
+              zIndex: 200,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <>
+      {/* Render Punkte mit Portal direkt in body */}
+      {typeof document !== 'undefined' && createPortal(circlesElement, document.body)}
+      <div 
+        className="aufmacher-wrapper"
+        onClick={handleInteraction}
+        onTouchStart={handleInteraction}
+        style={{ cursor: isFading || isAnimating ? 'default' : 'pointer', position: 'relative' }}
+      >
       {showClickHint && !isFading && (
         <div 
           style={{
-            position: 'absolute',
+            position: 'fixed',
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
@@ -816,46 +874,6 @@ function Aufmacher() {
           Klicken
         </div>
       )}
-      <div 
-        className="circles-container"
-        style={{
-          width: `${containerWidth}px`,
-          height: `${containerHeight}px`,
-          display: 'grid',
-          gridTemplateColumns: `repeat(${cols}, ${diameter}px)`,
-          gridTemplateRows: `repeat(${rows}, ${diameter}px)`,
-          gap: `${gap}px`,
-          justifyContent: 'center',
-          alignContent: 'center',
-        }}
-      >
-        {Array.from({ length: totalCircles }, (_, index) => {
-          const position = circlePositions[index] || { x: 0, y: 0 };
-          const isVisible = visibleCircles[index] !== false;
-          return (
-            <div
-              key={index}
-              className="circle"
-                    style={{ 
-                width: `${diameter}px`,
-                height: `${diameter}px`,
-                borderRadius: '50%',
-                backgroundColor: circleColors[index],
-                transition: isAnimating 
-                  ? 'none' 
-                  : 'background-color 1s ease-in-out, opacity 0.5s ease-in-out, transform 0.3s ease-out',
-                opacity: isAnimating 
-                  ? (circleOpacities[index] || 0) 
-                  : isFading 
-                    ? (fadeOutOpacities[index] !== undefined ? fadeOutOpacities[index] : (isVisible ? 1 : 0))
-                    : (isVisible ? 1 : 0),
-                transform: `translate(${position.x}px, ${position.y}px)`,
-                pointerEvents: isVisible ? 'auto' : 'none',
-              }}
-            />
-          );
-        })}
-      </div>
       {/* Senkrechter schwarzer Strich zwischen Punkten und Schrift */}
       {showLine && (
         <div
@@ -867,7 +885,7 @@ function Aufmacher() {
             width: '2px',
             height: `${2 * (9 * diameter + 8 * gap)}px`, // Doppelt so lang wie die Höhe der 9 sichtbaren Reihen
             backgroundColor: '#000000',
-            zIndex: 9999,
+            zIndex: 40, // Niedriger als Einführungstext (60), damit er verdeckt wird
             pointerEvents: 'none',
             opacity: showLine ? 1 : 0,
             transition: 'opacity 0.5s ease-in',
@@ -885,7 +903,7 @@ function Aufmacher() {
           maxWidth: `calc(100vw - ${textLeft}px - 16px)`, // Sicherstellen, dass Text nicht über Rand hinausgeht
           color: '#000000',
           pointerEvents: 'none',
-          zIndex: 10000, // Sehr hoher z-index
+          zIndex: 40, // Niedriger als Einführungstext (60), damit er verdeckt wird
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'flex-start',
@@ -960,7 +978,8 @@ function Aufmacher() {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

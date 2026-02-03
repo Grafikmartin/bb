@@ -16,7 +16,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 100; /* Höher als Einführungstext, damit Punkte darüber bleiben */
+  z-index: 0; /* Sehr niedrig, damit kein Stacking Context erstellt wird */
   overflow: visible;
 }
 
