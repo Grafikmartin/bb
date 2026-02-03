@@ -804,12 +804,12 @@ function Aufmacher() {
               width: `${diameter}px`,
               height: `${diameter}px`,
               borderRadius: '50%',
-              backgroundColor: circleColors[index],
+              backgroundColor: circleColors[index] || '#4dc3b5', // Fallback-Farbe falls undefined
               transition: isAnimating 
                 ? 'none' 
                 : 'background-color 1s ease-in-out, opacity 0.5s ease-in-out, transform 0.3s ease-out',
               opacity: isAnimating 
-                ? (circleOpacities[index] || 0) 
+                ? (circleOpacities[index] !== undefined ? circleOpacities[index] : 1) 
                 : isFading 
                   ? (fadeOutOpacities[index] !== undefined ? fadeOutOpacities[index] : (isVisible ? 1 : 0))
                   : (isVisible ? 1 : 0),
