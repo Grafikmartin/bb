@@ -4,6 +4,7 @@ import './Leistungen.css'
 function Leistungen() {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
+  const [isSticky, setIsSticky] = useState(false)
 
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout
@@ -12,12 +13,17 @@ function Leistungen() {
       const scrollY = window.scrollY
       const viewportHeight = window.innerHeight
       
-      // Berechne Scroll-Progress ab Einführungstext (ab 200vh)
-      // Stoppt bei 300vh, damit die Komponente sticky bleibt
-      const scrollProgress = Math.min(Math.max((scrollY - viewportHeight * 2) / viewportHeight, 0), 1)
-      const newScale = 0.7 + (scrollProgress * 0.3)
-      // Sobald scale = 1.0 erreicht ist, bleibt es bei 1.0
-      setScale(Math.min(newScale, 1.0))
+      // Prüfe ob Komponente sticky werden sollte (bei 300vh)
+      if (scrollY >= viewportHeight * 3) {
+        setIsSticky(true)
+        setScale(1.0) // Scale bleibt bei 1.0 wenn sticky
+      } else {
+        setIsSticky(false)
+        // Komponente scrollt noch - Scale-Animation läuft
+        const scrollProgress = Math.min(Math.max((scrollY - viewportHeight * 2) / viewportHeight, 0), 1)
+        const newScale = 0.7 + (scrollProgress * 0.3)
+        setScale(newScale)
+      }
     }
 
     const handleScroll = () => {
@@ -43,14 +49,17 @@ function Leistungen() {
   }, [isScrolling])
 
   return (
-    <section className="leistungen-section">
+    <section 
+      className="leistungen-section"
+      style={{
+        // Entferne Transform wenn sticky, damit sticky-Positionierung funktioniert
+        transform: isSticky ? 'none' : `scale(${scale})`,
+        transformOrigin: 'top center',
+        transition: isScrolling || isSticky ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+      }}
+    >
       <div
         className="leistungen-text"
-        style={{
-          transform: `scale(${scale})`,
-          transformOrigin: 'top center',
-          transition: isScrolling ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-        }}
       >
         <h2>Hypnosetherapie</h2>
         <p>
