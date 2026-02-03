@@ -84,6 +84,8 @@ function Aufmacher() {
   const [isFading, setIsFading] = useState(false);
   const [showClickHint, setShowClickHint] = useState(false);
   const [clickHintColor, setClickHintColor] = useState('#000000');
+  const [showLine, setShowLine] = useState(false);
+  const [typingText, setTypingText] = useState({ line1: '', line2: '', line3: '' });
   const [circleOpacities, setCircleOpacities] = useState<number[]>(() => {
     return Array.from({ length: totalCircles }, () => 0); // Starten mit opacity 0
   });
@@ -167,16 +169,17 @@ function Aufmacher() {
         setIsAnimating(false);
         setTimeout(() => {
           setShowClickHint(true);
-          // Starte Farbwechsel für den Klickbutton
+          // Starte Farbwechsel für den Klickbutton - nur dunkle Mint-Töne
           const mintColors = getMintColors();
-          const allColorsWithWhite = [...mintColors, '#ffffff'];
-          const initialColorIndex = Math.floor(Math.random() * allColorsWithWhite.length);
-          setClickHintColor(allColorsWithWhite[initialColorIndex]);
+          // Nur die ersten 3 dunklen Mint-Töne verwenden (signal, coral, sky)
+          const darkMintColors = mintColors.slice(0, 3);
+          const initialColorIndex = Math.floor(Math.random() * darkMintColors.length);
+          setClickHintColor(darkMintColors[initialColorIndex]);
           
           const colorInterval = setInterval(() => {
             if (!isFading) {
               setClickHintColor(prevColor => {
-                const availableColors = allColorsWithWhite.filter(c => c !== prevColor);
+                const availableColors = darkMintColors.filter(c => c !== prevColor);
                 if (availableColors.length > 0) {
                   const randomIndex = Math.floor(Math.random() * availableColors.length);
                   return availableColors[randomIndex];
@@ -342,6 +345,68 @@ function Aufmacher() {
     
     setIsFading(true);
     setShowClickHint(false); // Verstecke Klickaufforderung
+    
+    // Zeige Strich 500ms nach dem Klick
+    setTimeout(() => {
+      setShowLine(true);
+      
+      // Starte Text-Animation sofort nach dem Strich
+      const line1 = 'Benjamin Borth';
+      const line2 = 'Heilpraktiker für Psychotherapie';
+      const line3 = 'und Hypnosetherapeut';
+      
+      // Zeile 1 anzeigen (50% langsamer: jeden zweiten Frame ein Zeichen)
+      let currentIndex = 0;
+      let frameCount = 0;
+      const animateLine1 = () => {
+        if (currentIndex < line1.length) {
+          // Jeden zweiten Frame ein Zeichen (50% langsamer)
+          if (frameCount % 2 === 0) {
+            const nextIndex = Math.min(currentIndex + 1, line1.length);
+            setTypingText(prev => ({ ...prev, line1: line1.substring(0, nextIndex) }));
+            currentIndex = nextIndex;
+          }
+          frameCount++;
+          requestAnimationFrame(animateLine1);
+        } else {
+          // Zeile 2 anzeigen
+          currentIndex = 0;
+          frameCount = 0;
+          const animateLine2 = () => {
+            if (currentIndex < line2.length) {
+              // Jeden zweiten Frame ein Zeichen (50% langsamer)
+              if (frameCount % 2 === 0) {
+                const nextIndex = Math.min(currentIndex + 1, line2.length);
+                setTypingText(prev => ({ ...prev, line2: line2.substring(0, nextIndex) }));
+                currentIndex = nextIndex;
+              }
+              frameCount++;
+              requestAnimationFrame(animateLine2);
+            } else {
+              // Zeile 3 anzeigen
+              currentIndex = 0;
+              frameCount = 0;
+              const animateLine3 = () => {
+                if (currentIndex < line3.length) {
+                  // Jeden zweiten Frame ein Zeichen (50% langsamer)
+                  if (frameCount % 2 === 0) {
+                    const nextIndex = Math.min(currentIndex + 1, line3.length);
+                    setTypingText(prev => ({ ...prev, line3: line3.substring(0, nextIndex) }));
+                    currentIndex = nextIndex;
+                  }
+                  frameCount++;
+                  requestAnimationFrame(animateLine3);
+                }
+              };
+              requestAnimationFrame(animateLine3);
+            }
+          };
+          requestAnimationFrame(animateLine2);
+        }
+      };
+      requestAnimationFrame(animateLine1);
+    }, 500);
+    
     const centerIndices = getCenterCircleIndices();
     
     // Sammle alle Indizes, die verschwinden sollen
@@ -411,7 +476,7 @@ function Aufmacher() {
     // Jeder Kreis bekommt eine Verzögerung basierend auf seiner Distanz
     // Weiter entfernt = früher starten (kleinere Verzögerung)
     const maxDelay = 800; // Maximal 0,8 Sekunden Verzögerung (schneller)
-    const fadeDuration = 600; // 0,6 Sekunden zum Weiß wechseln (schneller)
+    const fadeDuration = 450; // 0,45 Sekunden zum Weiß wechseln (25% schneller: 600 * 0.75)
     const totalDuration = maxDelay + fadeDuration; // Gesamtdauer
     
     fadeIndicesWithDistance.forEach(({ index, distance }) => {
@@ -729,7 +794,7 @@ function Aufmacher() {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            zIndex: 10001,
+            zIndex: 100000,
             pointerEvents: 'none',
             textAlign: 'center',
             color: clickHintColor,
@@ -742,8 +807,10 @@ function Aufmacher() {
             opacity: 1,
             visibility: 'visible',
             border: `2px solid ${clickHintColor}`,
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
             padding: '0.5em 1em',
             borderRadius: '4px',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
           }}
         >
           Klicken
@@ -790,19 +857,23 @@ function Aufmacher() {
         })}
       </div>
       {/* Senkrechter schwarzer Strich zwischen Punkten und Schrift */}
-      <div
-        style={{
-          position: 'absolute',
-          left: `${textLeft - 32}px`, // Etwas links von der Schrift (2rem = 32px)
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: '2px',
-          height: `${2 * (9 * diameter + 8 * gap)}px`, // Doppelt so lang wie die Höhe der 9 sichtbaren Reihen
-          backgroundColor: '#000000',
-          zIndex: 9999,
-          pointerEvents: 'none',
-        }}
-      />
+      {showLine && (
+        <div
+          style={{
+            position: 'absolute',
+            left: `${textLeft - 32}px`, // Etwas links von der Schrift (2rem = 32px)
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: '2px',
+            height: `${2 * (9 * diameter + 8 * gap)}px`, // Doppelt so lang wie die Höhe der 9 sichtbaren Reihen
+            backgroundColor: '#000000',
+            zIndex: 9999,
+            pointerEvents: 'none',
+            opacity: showLine ? 1 : 0,
+            transition: 'opacity 0.5s ease-in',
+          }}
+        />
+      )}
       <div 
         className="aufmacher-name"
         style={{
@@ -818,8 +889,8 @@ function Aufmacher() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'flex-start',
-          opacity: 1,
-          visibility: 'visible',
+          opacity: 1, // Position bleibt fest, Text-Inhalt wird animiert
+          visibility: 'visible', // Position bleibt fest
           backgroundColor: 'transparent',
           boxSizing: 'border-box',
           paddingRight: '16px', // Padding rechts für Sicherheit
@@ -827,6 +898,7 @@ function Aufmacher() {
       >
         <div
           style={{
+            fontFamily: 'Helvetica, Arial, sans-serif',
             fontSize: 'clamp(1.92rem, 4.8vw, 3.84rem)',
             fontWeight: 400,
             letterSpacing: '0.05em',
@@ -835,12 +907,18 @@ function Aufmacher() {
             textShadow: 'none',
             textAlign: 'left',
             whiteSpace: 'nowrap',
+            minHeight: '1.2em', // Feste Höhe, damit Position nicht springt
+            height: '1.2em', // Feste Höhe
           }}
         >
-          Benjamin Borth
+          {typingText.line1}
+          {typingText.line1 && typingText.line1.length < 'Benjamin Borth'.length && (
+            <span style={{ opacity: 0.5 }}>|</span>
+          )}
         </div>
         <div
           style={{
+            fontFamily: 'Helvetica, Arial, sans-serif',
             fontSize: 'clamp(1.188rem, 2.64vw, 1.584rem)',
             fontWeight: 200,
             letterSpacing: '0.02em',
@@ -851,12 +929,18 @@ function Aufmacher() {
             textShadow: 'none',
             textAlign: 'left',
             whiteSpace: 'nowrap',
+            minHeight: '1.4em', // Feste Höhe, damit Position nicht springt
+            height: '1.4em', // Feste Höhe
           }}
         >
-          Heilpraktiker für Psychotherapie
+          {typingText.line2}
+          {typingText.line2 && typingText.line2.length < 'Heilpraktiker für Psychotherapie'.length && (
+            <span style={{ opacity: 0.5 }}>|</span>
+          )}
         </div>
         <div
           style={{
+            fontFamily: 'Helvetica, Arial, sans-serif',
             fontSize: 'clamp(1.188rem, 2.64vw, 1.584rem)',
             fontWeight: 200,
             letterSpacing: '0.02em',
@@ -866,9 +950,14 @@ function Aufmacher() {
             textShadow: 'none',
             textAlign: 'left',
             whiteSpace: 'nowrap',
+            minHeight: '1.4em', // Feste Höhe, damit Position nicht springt
+            height: '1.4em', // Feste Höhe
           }}
         >
-          und Hypnosetherapeut
+          {typingText.line3}
+          {typingText.line3 && typingText.line3.length < 'und Hypnosetherapeut'.length && (
+            <span style={{ opacity: 0.5 }}>|</span>
+          )}
         </div>
       </div>
     </div>
