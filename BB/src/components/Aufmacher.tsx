@@ -83,8 +83,12 @@ function Aufmacher() {
   const [isAnimating, setIsAnimating] = useState(true);
   const [isFading, setIsFading] = useState(false);
   const [showClickHint, setShowClickHint] = useState(false);
+  const [clickHintColor, setClickHintColor] = useState('#000000');
   const [circleOpacities, setCircleOpacities] = useState<number[]>(() => {
     return Array.from({ length: totalCircles }, () => 0); // Starten mit opacity 0
+  });
+  const [fadeOutOpacities, setFadeOutOpacities] = useState<number[]>(() => {
+    return Array.from({ length: totalCircles }, () => 1); // Starten mit opacity 1
   });
   const [visibleCircles, setVisibleCircles] = useState<boolean[]>(() => {
     return Array.from({ length: totalCircles }, () => true);
@@ -98,6 +102,7 @@ function Aufmacher() {
   
   // Berechne die Text-Position relativ zum Container
   const [textLeft, setTextLeft] = useState(0);
+  const [textWidth, setTextWidth] = useState('30vw');
   
   useEffect(() => {
     const calculateTextPosition = () => {
@@ -107,7 +112,20 @@ function Aufmacher() {
       const containerLeft = (viewportWidth - containerWidth) / 2;
       const viewport49vw = viewportWidth * 0.49;
       const offset7vw = viewportWidth * 0.07; // 7vw nach links (10vw - 3vw)
-      setTextLeft(viewport49vw - containerLeft - offset7vw);
+      let calculatedLeft = viewport49vw - containerLeft - offset7vw;
+      
+      // Berechne maximale Breite, damit der Text nicht über den Rand hinausgeht
+      const maxWidth = viewportWidth - calculatedLeft - 16; // 16px Padding rechts
+      const desiredWidth = viewportWidth * 0.3; // 30vw
+      const actualWidth = Math.min(desiredWidth, maxWidth);
+      
+      // Wenn der Text zu breit wäre, passe die Position an
+      if (actualWidth < desiredWidth) {
+        calculatedLeft = viewportWidth - actualWidth - 16; // 16px Padding rechts
+      }
+      
+      setTextLeft(calculatedLeft);
+      setTextWidth(`${actualWidth}px`);
     };
     
     calculateTextPosition();
@@ -149,6 +167,26 @@ function Aufmacher() {
         setIsAnimating(false);
         setTimeout(() => {
           setShowClickHint(true);
+          // Starte Farbwechsel für den Klickbutton
+          const mintColors = getMintColors();
+          const allColorsWithWhite = [...mintColors, '#ffffff'];
+          const initialColorIndex = Math.floor(Math.random() * allColorsWithWhite.length);
+          setClickHintColor(allColorsWithWhite[initialColorIndex]);
+          
+          const colorInterval = setInterval(() => {
+            if (!isFading) {
+              setClickHintColor(prevColor => {
+                const availableColors = allColorsWithWhite.filter(c => c !== prevColor);
+                if (availableColors.length > 0) {
+                  const randomIndex = Math.floor(Math.random() * availableColors.length);
+                  return availableColors[randomIndex];
+                }
+                return prevColor;
+              });
+            } else {
+              clearInterval(colorInterval);
+            }
+          }, 1500); // Wechsle alle 1.5 Sekunden
         }, 500);
       }
     };
@@ -314,59 +352,120 @@ function Aufmacher() {
       }
     }
     
-    // Jeder Kreis bekommt eine zufällige Verzögerung (0 bis 1,5 Sekunden)
-    // und wechselt dann in 1 Sekunde zu weiß mit weichem Übergang
-    const maxDelay = 1500; // Maximal 1,5 Sekunden Verzögerung
-    const fadeDuration = 1000; // 1 Sekunde zum Weiß wechseln (weicher)
+    // Initialisiere fadeOutOpacities für alle Kreise auf 1
+    setFadeOutOpacities(Array.from({ length: totalCircles }, () => 1));
     
-    fadeIndices.forEach((index) => {
-      const delay = Math.random() * maxDelay;
+    // Berechne die Distanz jedes Kreises zu den zentralen Kreisen
+    const startCol = 5; // Start der zentralen Spalten
+    const endCol = startCol + 20; // Ende der zentralen Spalten
+    const centerRowStart = Math.floor((rows - 9) / 2);
+    const centerRowEnd = centerRowStart + 9;
+    
+    // Berechne für jeden zu verschwindenden Kreis die rechteckige Distanz (Chebyshev-Distanz)
+    // zu den zentralen Kreisen - verwendet die maximale horizontale oder vertikale Distanz
+    const fadeIndicesWithDistance = fadeIndices.map(index => {
+      const row = Math.floor(index / cols);
+      const col = index % cols;
       
-      setTimeout(() => {
-        // Starte den Fade zu weiß für diesen Kreis
-        const startTime = Date.now();
-        const fadeSteps = 40; // Mehr Schritte für weicheren Übergang
-        const stepDuration = fadeDuration / fadeSteps;
-        let currentStep = 0;
+      // Berechne horizontale Distanz zum zentralen Bereich
+      // Die zentralen Spalten sind von startCol (inklusive) bis endCol (exklusive)
+      // endCol = startCol + 20, also die letzte zentrale Spalte ist endCol - 1
+      let distToCenterCol = 0;
+      if (col < startCol) {
+        // Links vom zentralen Bereich
+        distToCenterCol = startCol - col;
+      } else if (col >= endCol) {
+        // Rechts vom zentralen Bereich
+        // Die letzte zentrale Spalte ist endCol - 1, also ist die Distanz col - (endCol - 1)
+        distToCenterCol = col - (endCol - 1);
+      }
+      // Wenn col innerhalb [startCol, endCol), dann distToCenterCol = 0
+      
+      // Berechne vertikale Distanz zum zentralen Bereich
+      // Die zentralen Reihen sind von centerRowStart (inklusive) bis centerRowEnd (exklusive)
+      // centerRowEnd = centerRowStart + 9, also die letzte zentrale Reihe ist centerRowEnd - 1
+      let distToCenterRow = 0;
+      if (row < centerRowStart) {
+        // Oberhalb des zentralen Bereichs
+        distToCenterRow = centerRowStart - row;
+      } else if (row >= centerRowEnd) {
+        // Unterhalb des zentralen Bereichs
+        // Die letzte zentrale Reihe ist centerRowEnd - 1, also ist die Distanz row - (centerRowEnd - 1)
+        distToCenterRow = row - (centerRowEnd - 1);
+      }
+      // Wenn row innerhalb [centerRowStart, centerRowEnd), dann distToCenterRow = 0
+      
+      // Chebyshev-Distanz (L∞-Norm): maximale horizontale oder vertikale Distanz
+      // Dies erzeugt ein rechteckiges Muster - die äußersten Punkte haben die größte Distanz
+      const distance = Math.max(distToCenterCol, distToCenterRow);
+      
+      return { index, distance };
+    });
+    
+    // Sortiere nach Distanz (größte Distanz zuerst = verschwinden zuerst)
+    fadeIndicesWithDistance.sort((a, b) => b.distance - a.distance);
+    
+    // Finde maximale Distanz für Normalisierung
+    const maxDistance = Math.max(...fadeIndicesWithDistance.map(item => item.distance));
+    
+    // Jeder Kreis bekommt eine Verzögerung basierend auf seiner Distanz
+    // Weiter entfernt = früher starten (kleinere Verzögerung)
+    const maxDelay = 800; // Maximal 0,8 Sekunden Verzögerung (schneller)
+    const fadeDuration = 600; // 0,6 Sekunden zum Weiß wechseln (schneller)
+    const totalDuration = maxDelay + fadeDuration; // Gesamtdauer
+    
+    fadeIndicesWithDistance.forEach(({ index, distance }) => {
+      // Normalisiere Distanz (0 = am nächsten, 1 = am weitesten)
+      const normalizedDistance = maxDistance > 0 ? distance / maxDistance : 0;
+      // Umkehren: größere Distanz = kleinere Verzögerung
+      // delay = (1 - normalizedDistance) * maxDelay
+      // Wenn normalizedDistance = 1 (am weitesten), dann delay = 0 (sofort starten)
+      // Wenn normalizedDistance = 0 (am nächsten), dann delay = maxDelay (später starten)
+      const delay = (1 - normalizedDistance) * maxDelay;
+      const startTime = Date.now() + delay;
+      
+      // Starte den Fade für diesen Kreis
+      const fadeInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / fadeDuration, 1);
         
-        const fadeInterval = setInterval(() => {
-          setCircleColors(prevColors => {
-            const newColors = [...prevColors];
-            const color = prevColors[index];
-            
-            // Berechne Fade-Progress (0 = original, 1 = weiß)
-            let progress = currentStep / fadeSteps;
-            
-            // Easing-Funktion für weicheren Übergang (ease-in-out)
-            progress = progress < 0.5 
-              ? 2 * progress * progress 
-              : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-            
-            // Konvertiere Hex zu RGB
-            const hex = color.replace('#', '');
-            const r = parseInt(hex.substring(0, 2), 16);
-            const g = parseInt(hex.substring(2, 4), 16);
-            const b = parseInt(hex.substring(4, 6), 16);
-            
-            // Interpoliere zu weiß (255, 255, 255)
-            const newR = Math.round(r + (255 - r) * progress);
-            const newG = Math.round(g + (255 - g) * progress);
-            const newB = Math.round(b + (255 - b) * progress);
-            
-            // Konvertiere zurück zu Hex
-            const newColor = `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
-            
-            newColors[index] = newColor;
-            return newColors;
-          });
+        // Gleichmäßiger linearer Übergang (kein Easing für gleichmäßigeres Aussehen)
+        const opacity = Math.max(0, 1 - progress);
+        
+        // Aktualisiere Opacity
+        setFadeOutOpacities(prev => {
+          const newOpacities = [...prev];
+          newOpacities[index] = opacity;
+          return newOpacities;
+        });
+        
+        // Aktualisiere Farbe zu Weiß
+        setCircleColors(prevColors => {
+          const newColors = [...prevColors];
+          const color = prevColors[index];
           
-          currentStep++;
+          // Konvertiere Hex zu RGB
+          const hex = color.replace('#', '');
+          const r = parseInt(hex.substring(0, 2), 16);
+          const g = parseInt(hex.substring(2, 4), 16);
+          const b = parseInt(hex.substring(4, 6), 16);
           
-          if (currentStep > fadeSteps) {
-            clearInterval(fadeInterval);
-          }
-        }, stepDuration);
-      }, delay);
+          // Interpoliere zu weiß (255, 255, 255) - linearer Übergang
+          const newR = Math.round(r + (255 - r) * progress);
+          const newG = Math.round(g + (255 - g) * progress);
+          const newB = Math.round(b + (255 - b) * progress);
+          
+          // Konvertiere zurück zu Hex
+          const newColor = `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+          
+          newColors[index] = newColor;
+          return newColors;
+        });
+        
+        if (progress >= 1) {
+          clearInterval(fadeInterval);
+        }
+      }, 16); // ~60fps für flüssige Animation
     });
     
     // Nach allen Animationen: Setze opacity auf 0 und ändere Farben für spezielle Bereiche
@@ -397,7 +496,7 @@ function Aufmacher() {
         
         return newColors;
       });
-    }, maxDelay + fadeDuration);
+    }, totalDuration);
   };
 
   // Farbwechsel-Animation - jeder Kreis hat seinen eigenen Rhythmus
@@ -630,15 +729,21 @@ function Aufmacher() {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            zIndex: 1000,
+            zIndex: 10001,
             pointerEvents: 'none',
             textAlign: 'center',
-            color: 'var(--text-primary, #000000)',
+            color: clickHintColor,
             fontSize: 'clamp(1rem, 3vw, 1.5rem)',
-            fontWeight: 300,
+            fontWeight: 700,
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
             animation: 'pulse 2s ease-in-out infinite',
+            transition: 'color 1.5s ease-in-out, border-color 1.5s ease-in-out',
+            opacity: 1,
+            visibility: 'visible',
+            border: `2px solid ${clickHintColor}`,
+            padding: '0.5em 1em',
+            borderRadius: '4px',
           }}
         >
           Klicken
@@ -672,7 +777,11 @@ function Aufmacher() {
                 transition: isAnimating 
                   ? 'none' 
                   : 'background-color 1s ease-in-out, opacity 0.5s ease-in-out, transform 0.3s ease-out',
-                opacity: isAnimating ? (circleOpacities[index] || 0) : (isVisible ? 1 : 0),
+                opacity: isAnimating 
+                  ? (circleOpacities[index] || 0) 
+                  : isFading 
+                    ? (fadeOutOpacities[index] !== undefined ? fadeOutOpacities[index] : (isVisible ? 1 : 0))
+                    : (isVisible ? 1 : 0),
                 transform: `translate(${position.x}px, ${position.y}px)`,
                 pointerEvents: isVisible ? 'auto' : 'none',
               }}
@@ -698,10 +807,11 @@ function Aufmacher() {
         className="aufmacher-name"
         style={{
           position: 'absolute',
-          left: `${textLeft}px`, // Genau 49vw vom linken Rand des Viewports
+          left: `${textLeft}px`,
           top: '50%',
           transform: 'translateY(-50%)',
-          width: '30vw', // 30vw Breite
+          width: textWidth,
+          maxWidth: `calc(100vw - ${textLeft}px - 16px)`, // Sicherstellen, dass Text nicht über Rand hinausgeht
           color: '#000000',
           pointerEvents: 'none',
           zIndex: 10000, // Sehr hoher z-index
@@ -711,6 +821,8 @@ function Aufmacher() {
           opacity: 1,
           visibility: 'visible',
           backgroundColor: 'transparent',
+          boxSizing: 'border-box',
+          paddingRight: '16px', // Padding rechts für Sicherheit
         }}
       >
         <div
