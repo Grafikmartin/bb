@@ -1,8 +1,9 @@
 .video-section {
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
-  position: relative;
-  z-index: 100; /* Höher als Strich und Text (40), aber niedriger als Punkte (250) */
+  position: sticky;
+  top: 0;
+  z-index: 100; /* Erste Komponente */
   margin-top: 100vh; /* Platzhalter für den fixierten Aufmacher */
   overflow: hidden;
 }

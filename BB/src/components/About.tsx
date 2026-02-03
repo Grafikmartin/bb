@@ -7,6 +7,7 @@ function About() {
   const [showMore, setShowMore] = useState(false)
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
+  const [isSticky, setIsSticky] = useState(false)
   const paragraphRefs = useRef<(HTMLParagraphElement | null)[]>([])
   const aboutSectionRef = useRef<HTMLElement | null>(null)
 
@@ -62,7 +63,7 @@ function About() {
     }
   }, [showMore])
 
-  // Scale-Animation beim Scrollen (wie Einführungstext)
+  // Scale-Animation beim Scrollen
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout
 
@@ -71,10 +72,16 @@ function About() {
       const viewportHeight = window.innerHeight
       
       // Berechne Scroll-Progress ab Leistungen (ab 200vh)
-      // Scale von 0.7 (70%) auf 1.0 (100%) während des Scrollens
-      const scrollProgress = Math.min(Math.max((scrollY - viewportHeight * 2) / viewportHeight, 0), 1)
-      const newScale = 0.7 + (scrollProgress * 0.3)
-      setScale(newScale)
+      // Stoppt bei 300vh, damit die Komponente sticky bleibt
+      if (scrollY >= viewportHeight * 3) {
+        setIsSticky(true)
+        setScale(1.0) // Scale bleibt bei 1.0 wenn sticky
+      } else {
+        setIsSticky(false)
+        const scrollProgress = Math.min(Math.max((scrollY - viewportHeight * 2) / viewportHeight, 0), 1)
+        const newScale = 0.7 + (scrollProgress * 0.3)
+        setScale(newScale)
+      }
     }
 
     const handleScroll = () => {
@@ -104,11 +111,19 @@ function About() {
       ref={aboutSectionRef}
       className="about-section"
       style={{
-        transform: `scale(${scale})`,
+        // Entferne Transform wenn sticky, damit sticky-Positionierung funktioniert
+        transform: isSticky ? 'none' : `scale(${scale})`,
         transformOrigin: 'top center',
-        transition: isScrolling ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: isScrolling || isSticky ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
+      <div
+        style={{
+          width: '100%',
+          minHeight: '100vh',
+          position: 'relative',
+        }}
+      >
       <img 
         src={aboutImage} 
         alt="Benjamin Borth" 
@@ -163,6 +178,7 @@ function About() {
             </p>
           </>
         )}
+      </div>
       </div>
     </section>
   )

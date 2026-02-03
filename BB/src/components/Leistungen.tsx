@@ -12,11 +12,12 @@ function Leistungen() {
       const scrollY = window.scrollY
       const viewportHeight = window.innerHeight
       
-      // Berechne Scroll-Progress ab Einführungstext (ab 100vh)
-      // Scale von 0.7 (70%) auf 1.0 (100%) während des Scrollens
-      const scrollProgress = Math.min(Math.max((scrollY - viewportHeight) / viewportHeight, 0), 1)
+      // Berechne Scroll-Progress ab Einführungstext (ab 200vh)
+      // Stoppt bei 300vh, damit die Komponente sticky bleibt
+      const scrollProgress = Math.min(Math.max((scrollY - viewportHeight * 2) / viewportHeight, 0), 1)
       const newScale = 0.7 + (scrollProgress * 0.3)
-      setScale(newScale)
+      // Sobald scale = 1.0 erreicht ist, bleibt es bei 1.0
+      setScale(Math.min(newScale, 1.0))
     }
 
     const handleScroll = () => {
@@ -42,15 +43,15 @@ function Leistungen() {
   }, [isScrolling])
 
   return (
-    <section 
-      className="leistungen-section"
-      style={{
-        transform: `scale(${scale})`,
-        transformOrigin: 'top center',
-        transition: isScrolling ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-      }}
-    >
-      <div className="leistungen-text">
+    <section className="leistungen-section">
+      <div
+        className="leistungen-text"
+        style={{
+          transform: `scale(${scale})`,
+          transformOrigin: 'top center',
+          transition: isScrolling ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
+      >
         <h2>Hypnosetherapie</h2>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

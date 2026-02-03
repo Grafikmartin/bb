@@ -1,13 +1,15 @@
 .about-section {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   background-color: var(--color-coral, #7dd3c4); /* Mint-Hintergrund */
   padding: var(--spacing-xl, 4rem) 0;
-  position: relative;
-  z-index: 350; /* Höher als Punkte (300), damit About über den Punkten liegt */
+  position: sticky;
+  top: 0;
+  z-index: 350; /* Höher als Punkte (300) und Leistungen (120) */
   margin-top: 0; /* Direkt nach Leistungen */
+  will-change: transform; /* Optimierung für sticky */
 }
 
 .about-image {

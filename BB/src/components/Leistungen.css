@@ -1,13 +1,15 @@
 .leistungen-section {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   background-color: #ffffff; /* Weißer Hintergrund */
   padding: var(--spacing-xl, 4rem) 0;
-  position: relative;
-  z-index: 100; /* Höher als Strich und Text (40), aber niedriger als Punkte (250) */
+  position: sticky;
+  top: 0;
+  z-index: 120; /* Höher als Einführungstext (110) */
   margin-top: 0; /* Direkt nach Einführungstext */
+  will-change: transform; /* Optimierung für sticky */
 }
 
 .leistungen-text {

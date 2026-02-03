@@ -5,6 +5,7 @@ import videoSrc from '../assets/18420-292228405_small.mp4'
 function Video() {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
+  const [isSticky, setIsSticky] = useState(false)
 
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout
@@ -13,11 +14,17 @@ function Video() {
       const scrollY = window.scrollY
       const viewportHeight = window.innerHeight
       
-      // Berechne Scroll-Progress (0 = oben, 1 = nach 100vh gescrollt)
-      // Scale von 0.7 (70%) auf 1.0 (100%) während des Scrollens
-      const scrollProgress = Math.min(scrollY / viewportHeight, 1)
-      const newScale = 0.7 + (scrollProgress * 0.3)
-      setScale(newScale)
+      // Prüfe ob Komponente sticky werden sollte (bei 100vh)
+      if (scrollY >= viewportHeight) {
+        setIsSticky(true)
+        setScale(1.0) // Scale bleibt bei 1.0 wenn sticky
+      } else {
+        setIsSticky(false)
+        // Komponente scrollt noch - Scale-Animation läuft
+        const scrollProgress = Math.min(scrollY / viewportHeight, 1)
+        const newScale = 0.7 + (scrollProgress * 0.3)
+        setScale(newScale)
+      }
     }
 
     const handleScroll = () => {
@@ -46,21 +53,31 @@ function Video() {
     <section 
       className="video-section"
       style={{
-        transform: `scale(${scale})`,
+        // Entferne Transform wenn sticky, damit sticky-Positionierung funktioniert
+        transform: isSticky ? 'none' : `scale(${scale})`,
         transformOrigin: 'top center',
-        transition: isScrolling ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: isScrolling || isSticky ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
-      <video
-        src={videoSrc}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="video-element"
+      <div
+        className="video-wrapper"
+        style={{
+          width: '100%',
+          height: '100vh',
+          position: 'relative',
+        }}
       >
-        Ihr Browser unterstützt das Video-Element nicht.
-      </video>
+        <video
+          src={videoSrc}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="video-element"
+        >
+          Ihr Browser unterstützt das Video-Element nicht.
+        </video>
+      </div>
     </section>
   )
 }

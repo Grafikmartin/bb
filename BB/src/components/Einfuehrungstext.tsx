@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import './Einfuehrungstext.css'
 
 function Einfuehrungstext() {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
-  const rafIdRef = useRef<number | null>(null)
 
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout
@@ -13,12 +12,12 @@ function Einfuehrungstext() {
       const scrollY = window.scrollY
       const viewportHeight = window.innerHeight
       
-      // Berechne Scroll-Progress (0 = oben, 1 = nach 100vh gescrollt)
-      const scrollProgress = Math.min(scrollY / viewportHeight, 1)
-      
-      // Scale von 0.7 (70%) auf 1.0 (100%) während des Scrollens
+      // Berechne Scroll-Progress ab Video (ab 100vh)
+      // Stoppt bei 200vh, damit die Komponente sticky bleibt
+      const scrollProgress = Math.min(Math.max((scrollY - viewportHeight) / viewportHeight, 0), 1)
       const newScale = 0.7 + (scrollProgress * 0.3)
-      setScale(newScale)
+      // Sobald scale = 1.0 erreicht ist, bleibt es bei 1.0
+      setScale(Math.min(newScale, 1.0))
     }
 
     const handleScroll = () => {
@@ -26,18 +25,13 @@ function Einfuehrungstext() {
         setIsScrolling(true)
       }
       
-      // Clear existing timeout
       clearTimeout(scrollTimeout)
-      
-      // Update scale immediately during scroll
       updateScale()
       
-      // Set timeout to detect when scrolling stops
       scrollTimeout = setTimeout(() => {
         setIsScrolling(false)
-        // Final update after scrolling stops
         updateScale()
-      }, 100) // Kurze Verzögerung für sanftes Auslaufen
+      }, 100)
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -45,22 +39,19 @@ function Einfuehrungstext() {
     return () => {
       window.removeEventListener('scroll', handleScroll)
       clearTimeout(scrollTimeout)
-      if (rafIdRef.current) {
-        cancelAnimationFrame(rafIdRef.current)
-      }
     }
   }, [isScrolling])
 
   return (
-    <section 
-      className="einfuehrungstext-section"
-      style={{
-        transform: `scale(${scale})`,
-        transformOrigin: 'top center',
-        transition: isScrolling ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-      }}
-    >
-      <div className="einfuehrungstext-text">
+    <section className="einfuehrungstext-section">
+      <div
+        className="einfuehrungstext-text"
+        style={{
+          transform: `scale(${scale})`,
+          transformOrigin: 'top center',
+          transition: isScrolling ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
+      >
         <p>
           In meiner Praxis begleite ich dich mit Hypnose und Gesprächstherapie zu mehr Ruhe, Klarheit und Lebensfreude.
         </p>

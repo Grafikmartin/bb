@@ -1,13 +1,15 @@
 .einfuehrungstext-section {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   background-color: var(--color-coral, #7dd3c4);
   padding: var(--spacing-xl, 4rem) 0;
-  position: relative;
-  z-index: 100; /* Höher als Strich und Text (40), aber niedriger als Punkte (250) */
-  margin-top: 100vh; /* Platzhalter für den fixierten Aufmacher */
+  position: sticky;
+  top: 0;
+  z-index: 110; /* Höher als Video (100) */
+  margin-top: 0; /* Direkt nach Video */
+  will-change: transform; /* Optimierung für sticky */
 }
 
 .einfuehrungstext-text {
