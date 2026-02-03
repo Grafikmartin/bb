@@ -9,6 +9,7 @@ function Video() {
 
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout
+    let lastScrollY = 0
     const viewportHeight = window.innerHeight
     const stickyPoint = viewportHeight // Video wird sticky bei 100vh
 
@@ -19,14 +20,6 @@ function Video() {
       if (scrollY >= stickyPoint) {
         setIsSticky(true)
         setScale(1.0) // Scale bleibt bei 1.0 wenn sticky
-        
-        // Verhindere weiteres Scrollen nach oben - halte Position fest
-        if (window.scrollY > stickyPoint) {
-          window.scrollTo({
-            top: stickyPoint,
-            behavior: 'auto'
-          })
-        }
       } else {
         setIsSticky(false)
         // Komponente scrollt noch - Scale-Animation läuft
@@ -37,26 +30,39 @@ function Video() {
     }
 
     const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      
+      // Wenn sticky und versucht nach oben zu scrollen, verhindere das
+      if (isSticky && currentScrollY < stickyPoint) {
+        window.scrollTo({
+          top: stickyPoint,
+          behavior: 'auto'
+        })
+        return
+      }
+      
+      // Wenn sticky und versucht weiter nach oben zu scrollen, halte Position fest
+      if (isSticky && currentScrollY > stickyPoint) {
+        window.scrollTo({
+          top: stickyPoint,
+          behavior: 'auto'
+        })
+        return
+      }
+      
       if (!isScrolling) {
         setIsScrolling(true)
       }
       
       clearTimeout(scrollTimeout)
-      
-      // Wenn sticky, verhindere weiteres Scrollen nach oben
-      if (isSticky && window.scrollY > stickyPoint) {
-        window.scrollTo({
-          top: stickyPoint,
-          behavior: 'auto'
-        })
-      }
-      
       updateScale()
       
       scrollTimeout = setTimeout(() => {
         setIsScrolling(false)
         updateScale()
       }, 100)
+      
+      lastScrollY = currentScrollY
     }
 
     window.addEventListener('scroll', handleScroll, { passive: false })
