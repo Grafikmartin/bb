@@ -1,11 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Einfuehrungstext.css'
 
 function Einfuehrungstext() {
   const [scale, setScale] = useState(0.7)
+  const [isScrolling, setIsScrolling] = useState(false)
+  const rafIdRef = useRef<number | null>(null)
 
   useEffect(() => {
-    const handleScroll = () => {
+    let scrollTimeout: NodeJS.Timeout
+
+    const updateScale = () => {
       const scrollY = window.scrollY
       const viewportHeight = window.innerHeight
       
@@ -17,12 +21,35 @@ function Einfuehrungstext() {
       setScale(newScale)
     }
 
+    const handleScroll = () => {
+      if (!isScrolling) {
+        setIsScrolling(true)
+      }
+      
+      // Clear existing timeout
+      clearTimeout(scrollTimeout)
+      
+      // Update scale immediately during scroll
+      updateScale()
+      
+      // Set timeout to detect when scrolling stops
+      scrollTimeout = setTimeout(() => {
+        setIsScrolling(false)
+        // Final update after scrolling stops
+        updateScale()
+      }, 100) // Kurze Verzögerung für sanftes Auslaufen
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
     
     return () => {
       window.removeEventListener('scroll', handleScroll)
+      clearTimeout(scrollTimeout)
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current)
+      }
     }
-  }, [])
+  }, [isScrolling])
 
   return (
     <section 
@@ -30,7 +57,7 @@ function Einfuehrungstext() {
       style={{
         transform: `scale(${scale})`,
         transformOrigin: 'top center',
-        transition: 'transform 0.1s ease-out',
+        transition: isScrolling ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
       <div className="einfuehrungstext-text">
