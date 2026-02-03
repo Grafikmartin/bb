@@ -88,9 +88,7 @@ function Aufmacher() {
   const [showLine, setShowLine] = useState(false);
   const [typingText, setTypingText] = useState({ line1: '', line2: '', line3: '' });
   const [circleOpacities, setCircleOpacities] = useState<number[]>(() => {
-    // Initialisiere mit totalCircles, aber verwende dimensions falls totalCircles noch 0 ist
-    const initialLength = totalCircles > 0 ? totalCircles : (dimensions.cols * dimensions.rows);
-    return Array.from({ length: initialLength }, () => 0); // Starten mit opacity 0
+    return Array.from({ length: totalCircles }, () => 0); // Starten mit opacity 0
   });
   const [fadeOutOpacities, setFadeOutOpacities] = useState<number[]>(() => {
     return Array.from({ length: totalCircles }, () => 1); // Starten mit opacity 1
@@ -157,7 +155,8 @@ function Aufmacher() {
     setVisibleCircles(Array.from({ length: totalCircles }, () => true));
     
     // Alle Kreise sanft innerhalb von 2 Sekunden erscheinen lassen (von transparent zu sichtbar)
-    setCircleOpacities(Array.from({ length: totalCircles }, () => 0));
+    // Starte mit einer minimalen Opacity, damit sie sofort sichtbar sind
+    setCircleOpacities(Array.from({ length: totalCircles }, () => 0.01));
     const fadeInDuration = 2000; // 2 Sekunden
     const startTime = Date.now();
     
@@ -165,13 +164,17 @@ function Aufmacher() {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / fadeInDuration, 1);
       
-      setCircleOpacities(Array.from({ length: totalCircles }, () => progress));
+      // Interpoliere von 0.01 zu 1.0 für smooth fade-in
+      const opacity = 0.01 + (progress * 0.99);
+      setCircleOpacities(Array.from({ length: totalCircles }, () => opacity));
       
       if (progress < 1) {
         requestAnimationFrame(fadeIn);
       } else {
         // Nach dem Fade-in: Animation beenden und Klickaufforderung anzeigen
         setIsAnimating(false);
+        // Stelle sicher, dass alle Opacities auf 1.0 sind
+        setCircleOpacities(Array.from({ length: totalCircles }, () => 1.0));
         setTimeout(() => {
           setShowClickHint(true);
           // Starte Farbwechsel für den Klickbutton - nur dunkle Mint-Töne
@@ -199,8 +202,10 @@ function Aufmacher() {
       }
     };
     
-    // Starte Animation sofort
-    requestAnimationFrame(fadeIn);
+    // Starte Animation sofort mit einem kleinen Delay, damit React fertig gerendert hat
+    setTimeout(() => {
+      requestAnimationFrame(fadeIn);
+    }, 50);
   }, [totalCircles]);
 
 
