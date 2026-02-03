@@ -127,86 +127,35 @@ function Aufmacher() {
   
   // Aktualisiere circlePositions und visibleCircles wenn sich totalCircles ändert
   useEffect(() => {
-    if (isAnimating) {
-      setCirclePositions(Array.from({ length: totalCircles }, () => ({
-        x: Math.random() * 200 - 100,
-        y: Math.random() * 200 - 100,
-      })));
-      setVisibleCircles(Array.from({ length: totalCircles }, () => true));
-      // Alle Kreise sanft innerhalb einer Sekunde erscheinen lassen
-      setCircleOpacities(Array.from({ length: totalCircles }, () => 0));
-      const fadeInDuration = 1000; // 1 Sekunde
-      const startTime = Date.now();
-      
-      const fadeIn = () => {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / fadeInDuration, 1);
-        
-        setCircleOpacities(Array.from({ length: totalCircles }, () => progress));
-        
-        if (progress < 1) {
-          requestAnimationFrame(fadeIn);
-        }
-      };
-      
-      requestAnimationFrame(fadeIn);
-    }
-  }, [totalCircles, isAnimating]);
-
-  // Bienen-Animation: Kreise bewegen sich chaotisch für 3 Sekunden, dann zur richtigen Position
-  // Nach 3 Sekunden: Klickaufforderung anzeigen
-  useEffect(() => {
-    if (!isAnimating) return;
-
-    const animationDuration = 3000; // 3 Sekunden chaotische Bewegung
+    // Setze alle Kreise sofort auf ihre richtige Position (0, 0)
+    setCirclePositions(Array.from({ length: totalCircles }, () => ({ x: 0, y: 0 })));
+    setVisibleCircles(Array.from({ length: totalCircles }, () => true));
+    
+    // Alle Kreise sanft innerhalb von 2 Sekunden erscheinen lassen (von transparent zu sichtbar)
+    setCircleOpacities(Array.from({ length: totalCircles }, () => 0));
+    const fadeInDuration = 2000; // 2 Sekunden
     const startTime = Date.now();
-    let animationFrameId: number;
-
-    const animate = () => {
+    
+    const fadeIn = () => {
       const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / animationDuration, 1);
-
+      const progress = Math.min(elapsed / fadeInDuration, 1);
+      
+      setCircleOpacities(Array.from({ length: totalCircles }, () => progress));
+      
       if (progress < 1) {
-        // Während der Animation: chaotische Bewegung (wie Bienen im Nest)
-        setCirclePositions(prevPositions => {
-          return prevPositions.map((pos, index) => {
-            // Zufällige Bewegung mit abnehmender Intensität
-            // Easing: schneller Start, langsameres Ende
-            const easeOut = 1 - Math.pow(1 - progress, 3);
-            const intensity = (1 - easeOut) * 80; // Von 80px auf 0px
-            
-            // Zufällige Bewegung in alle Richtungen
-            const randomX = (Math.random() - 0.5) * intensity * 2;
-            const randomY = (Math.random() - 0.5) * intensity * 2;
-            
-            // Leichte Tendenz zur Mitte (wie Bienen die zum Nest zurückkehren)
-            const centerPull = easeOut * 0.2;
-            return {
-              x: (pos.x || 0) * (1 - centerPull) + randomX,
-              y: (pos.y || 0) * (1 - centerPull) + randomY,
-            };
-          });
-        });
-        animationFrameId = requestAnimationFrame(animate);
+        requestAnimationFrame(fadeIn);
       } else {
-        // Nach 3 Sekunden: alle Kreise an ihre richtige Position (0, 0)
-        setCirclePositions(Array.from({ length: totalCircles }, () => ({ x: 0, y: 0 })));
+        // Nach dem Fade-in: Animation beenden und Klickaufforderung anzeigen
         setIsAnimating(false);
-        // Zeige Klickaufforderung nach kurzer Verzögerung
         setTimeout(() => {
           setShowClickHint(true);
         }, 500);
       }
     };
+    
+    requestAnimationFrame(fadeIn);
+  }, [totalCircles]);
 
-    animationFrameId = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-    };
-  }, [isAnimating, totalCircles]);
 
   // Berechne welche Kreise die mittigen 20x9 sind
   const getCenterCircleIndices = () => {
