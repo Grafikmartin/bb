@@ -67,36 +67,15 @@ function Aufmacher() {
   const totalCircles = cols * rows;
 
 
-  // Initiale Farben müssen nach dimensions berechnet werden
+  // Initiale Farben: Alle Punkte bekommen zufällige Minttöne + Weiß
   const getInitialColors = (): string[] => {
     const allColors = getMintColors();
-    const lightest2 = ['#d8f2eb', '#ebf8f4'];
-    const lightest3 = ['#c5ebe2', '#d8f2eb', '#ebf8f4'];
-    const lightest4 = ['#a0dfd1', '#c5ebe2', '#d8f2eb', '#ebf8f4'];
+    // Alle Minttöne + Weiß für alle Punkte
+    const allColorsWithWhite = [...allColors, '#ffffff'];
     
-    return Array.from({ length: totalCircles }, (_, index) => {
-      const row = Math.floor(index / cols);
-      const col = index % cols;
-      
-      let availableColors: string[];
-      
-      const isTopRow = row < 10;
-      const isBottomRow = row >= rows - 10;
-      const isLeftCol = col < 4;
-      const isRightCol = col >= cols - 4;
-      
-      if (isTopRow || isBottomRow || isLeftCol || isRightCol) {
-        availableColors = lightest2;
-      } else if (row === 10 || row === rows - 11 || col === 4 || col === cols - 5) {
-        availableColors = lightest3;
-      } else if (row === 11 || row === rows - 12 || col === 5 || col === cols - 6) {
-        availableColors = lightest4;
-      } else {
-        availableColors = allColors;
-      }
-      
-      const randomIndex = Math.floor(Math.random() * availableColors.length);
-      return availableColors[randomIndex];
+    return Array.from({ length: totalCircles }, () => {
+      const randomIndex = Math.floor(Math.random() * allColorsWithWhite.length);
+      return allColorsWithWhite[randomIndex];
     });
   };
 
@@ -104,6 +83,9 @@ function Aufmacher() {
   const [isAnimating, setIsAnimating] = useState(true);
   const [isFading, setIsFading] = useState(false);
   const [showClickHint, setShowClickHint] = useState(false);
+  const [circleOpacities, setCircleOpacities] = useState<number[]>(() => {
+    return Array.from({ length: totalCircles }, () => 0); // Starten mit opacity 0
+  });
   const [visibleCircles, setVisibleCircles] = useState<boolean[]>(() => {
     return Array.from({ length: totalCircles }, () => true);
   });
@@ -113,6 +95,25 @@ function Aufmacher() {
       y: Math.random() * 200 - 100,
     }));
   });
+  
+  // Berechne die Text-Position relativ zum Container
+  const [textLeft, setTextLeft] = useState(0);
+  
+  useEffect(() => {
+    const calculateTextPosition = () => {
+      if (typeof window === 'undefined') return;
+      const viewportWidth = window.innerWidth;
+      const containerWidth = cols * dimensions.diameter + (cols - 1) * dimensions.gap;
+      const containerLeft = (viewportWidth - containerWidth) / 2;
+      const viewport49vw = viewportWidth * 0.49;
+      const offset7vw = viewportWidth * 0.07; // 7vw nach links (10vw - 3vw)
+      setTextLeft(viewport49vw - containerLeft - offset7vw);
+    };
+    
+    calculateTextPosition();
+    window.addEventListener('resize', calculateTextPosition);
+    return () => window.removeEventListener('resize', calculateTextPosition);
+  }, [cols, dimensions]);
 
   // Aktualisiere Dimensionen bei Fenstergrößenänderung
   useEffect(() => {
@@ -132,6 +133,23 @@ function Aufmacher() {
         y: Math.random() * 200 - 100,
       })));
       setVisibleCircles(Array.from({ length: totalCircles }, () => true));
+      // Alle Kreise sanft innerhalb einer Sekunde erscheinen lassen
+      setCircleOpacities(Array.from({ length: totalCircles }, () => 0));
+      const fadeInDuration = 1000; // 1 Sekunde
+      const startTime = Date.now();
+      
+      const fadeIn = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / fadeInDuration, 1);
+        
+        setCircleOpacities(Array.from({ length: totalCircles }, () => progress));
+        
+        if (progress < 1) {
+          requestAnimationFrame(fadeIn);
+        }
+      };
+      
+      requestAnimationFrame(fadeIn);
     }
   }, [totalCircles, isAnimating]);
 
@@ -347,9 +365,9 @@ function Aufmacher() {
       }
     }
     
-    // Jeder Kreis bekommt eine zufällige Verzögerung (0 bis 3 Sekunden)
+    // Jeder Kreis bekommt eine zufällige Verzögerung (0 bis 1,5 Sekunden)
     // und wechselt dann in 1 Sekunde zu weiß mit weichem Übergang
-    const maxDelay = 3000; // Maximal 3 Sekunden Verzögerung
+    const maxDelay = 1500; // Maximal 1,5 Sekunden Verzögerung
     const fadeDuration = 1000; // 1 Sekunde zum Weiß wechseln (weicher)
     
     fadeIndices.forEach((index) => {
@@ -526,6 +544,20 @@ function Aufmacher() {
             return newColors;
           }
           
+          // Vor dem Klick: Alle Punkte verwenden alle Minttöne + Weiß
+          if (!isFading) {
+            const allColors = getMintColors();
+            const allColorsWithWhite = [...allColors, '#ffffff'];
+            const currentColor = prevColors[index];
+            const availableWithoutCurrent = allColorsWithWhite.filter(c => c !== currentColor);
+            if (availableWithoutCurrent.length > 0) {
+              const randomIndex = Math.floor(Math.random() * availableWithoutCurrent.length);
+              newColors[index] = availableWithoutCurrent[randomIndex];
+            }
+            return newColors;
+          }
+          
+          // Nach dem Klick: Spezielle Logik für verschiedene Bereiche
           // Bestimme welche Farben für diese Position verwendet werden sollen
           const allColors = getMintColors();
           const lightest2 = ['#d8f2eb', '#ebf8f4'];
@@ -550,14 +582,12 @@ function Aufmacher() {
           }
           
           // Für innere Kreise (nach dem Klick): Füge weiß mit 1:4 Wahrscheinlichkeit hinzu
-          if (isFading) {
-            const centerIndices = getCenterCircleIndices();
-            if (centerIndices.has(index) && !isLightColorArea(index) && !isOuterRowArea(index)) {
-              // 1:4 Verhältnis = 25% Chance für weiß
-              if (Math.random() < 0.25) {
-                // Füge weiß zu den verfügbaren Farben hinzu
-                availableColors = [...availableColors, '#ffffff'];
-              }
+          const centerIndices = getCenterCircleIndices();
+          if (centerIndices.has(index) && !isLightColorArea(index) && !isOuterRowArea(index)) {
+            // 1:4 Verhältnis = 25% Chance für weiß
+            if (Math.random() < 0.25) {
+              // Füge weiß zu den verfügbaren Farben hinzu
+              availableColors = [...availableColors, '#ffffff'];
             }
           }
           
@@ -679,7 +709,7 @@ function Aufmacher() {
                 transition: isAnimating 
                   ? 'none' 
                   : 'background-color 1s ease-in-out, opacity 0.5s ease-in-out, transform 0.3s ease-out',
-                opacity: isAnimating ? 0 : (isVisible ? 1 : 0),
+                opacity: isAnimating ? (circleOpacities[index] || 0) : (isVisible ? 1 : 0),
                 transform: `translate(${position.x}px, ${position.y}px)`,
                 pointerEvents: isVisible ? 'auto' : 'none',
               }}
@@ -691,9 +721,10 @@ function Aufmacher() {
         className="aufmacher-name"
         style={{
           position: 'absolute',
-          left: `calc(50% + ${containerWidth / 2}px + 2rem)`, // Rechts neben dem Grid
+          left: `${textLeft}px`, // Genau 49vw vom linken Rand des Viewports
           top: '50%',
           transform: 'translateY(-50%)',
+          width: '30vw', // 30vw Breite
           color: '#000000',
           pointerEvents: 'none',
           zIndex: 10000, // Sehr hoher z-index
@@ -702,36 +733,49 @@ function Aufmacher() {
           alignItems: 'flex-start',
           opacity: 1,
           visibility: 'visible',
-          minWidth: '200px',
-          maxWidth: 'calc(100vw - 49vw - 4vw)', // Verhindert, dass Text rechts verschwindet
+          backgroundColor: 'transparent',
         }}
       >
         <div
           style={{
-            fontSize: 'clamp(1.5rem, 4vw, 3rem)',
-            fontWeight: 700,
+            fontSize: 'clamp(1.6rem, 4vw, 3.2rem)',
+            fontWeight: 400,
             letterSpacing: '0.05em',
-            whiteSpace: 'nowrap',
             lineHeight: 1.2,
             color: '#000000',
             textShadow: 'none',
+            textAlign: 'left',
+            whiteSpace: 'nowrap',
           }}
         >
           Benjamin Borth
         </div>
         <div
           style={{
-            fontSize: 'clamp(0.9rem, 2vw, 1.2rem)',
-            fontWeight: 300,
+            fontSize: 'clamp(0.99rem, 2.2vw, 1.32rem)',
+            fontWeight: 200,
             letterSpacing: '0.02em',
-            marginTop: '0.5rem',
+            marginTop: '0.25rem',
             lineHeight: 1.4,
             color: '#000000',
             textShadow: 'none',
+            textAlign: 'left',
+            whiteSpace: 'nowrap',
           }}
         >
-          <br />
-          Heilpraktiker für Psychotherapie<br />
+          Heilpraktiker für Psychotherapie
+        </div>
+        <div
+          style={{
+            fontSize: 'clamp(0.99rem, 2.2vw, 1.32rem)',
+            fontWeight: 200,
+            letterSpacing: '0.02em',
+            lineHeight: 1.4,
+            color: '#000000',
+            textShadow: 'none',
+            textAlign: 'left',
+          }}
+        >
           und Hypnosetherapeut
         </div>
       </div>
