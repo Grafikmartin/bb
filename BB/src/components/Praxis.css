@@ -9,7 +9,7 @@
   top: 0;
   z-index: 360; /* Höher als About (350) */
   margin-top: 0; /* Direkt nach About */
-  will-change: transform; /* Optimierung für sticky */
+  /* will-change wird dynamisch gesetzt */
 }
 
 .praxis-text {

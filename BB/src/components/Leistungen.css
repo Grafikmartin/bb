@@ -9,7 +9,7 @@
   top: 0;
   z-index: 120; /* Höher als Einführungstext (110) */
   margin-top: 0; /* Direkt nach Einführungstext */
-  will-change: transform; /* Optimierung für sticky */
+  /* will-change wird dynamisch gesetzt */
 }
 
 .leistungen-text {

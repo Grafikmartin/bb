@@ -9,7 +9,7 @@
   top: 0;
   z-index: 350; /* Höher als Punkte (300) und Leistungen (120) */
   margin-top: 0; /* Direkt nach Leistungen */
-  will-change: transform; /* Optimierung für sticky */
+  /* will-change wird dynamisch gesetzt */
 }
 
 .about-image {
