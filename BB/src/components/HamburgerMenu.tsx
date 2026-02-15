@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './HamburgerMenu.css'
 
 const MENU_ITEMS = [
@@ -10,6 +10,24 @@ const MENU_ITEMS = [
 
 function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+
+  const closeMenu = () => {
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current)
+    setIsClosing(true)
+    closeTimeoutRef.current = setTimeout(() => {
+      setIsOpen(false)
+      setIsClosing(false)
+      closeTimeoutRef.current = undefined
+    }, 300)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current)
+    }
+  }, [])
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id)
@@ -35,10 +53,13 @@ function HamburgerMenu() {
         <>
           <div
             className="hamburger-backdrop"
-            onClick={() => setIsOpen(false)}
+            onClick={closeMenu}
             aria-hidden="true"
           />
-          <nav className="hamburger-nav">
+          <nav
+            className={`hamburger-nav ${isClosing ? 'closing' : ''}`}
+            onMouseLeave={closeMenu}
+          >
             {MENU_ITEMS.map((item) => (
               <button
                 key={item.id}

@@ -84,8 +84,8 @@
 }
 
 .more-button:hover {
-  background-color: #caece4;
-  color: var(--text-primary, #000000);
+  background-color: #5bc4b5;
+  color: #ffffff;
 }
 
 .about-text p {
