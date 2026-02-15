@@ -103,3 +103,23 @@
   height: 100%;
   border: 0;
 }
+
+@media (max-width: 768px) {
+  .kontakt-title {
+    font-size: 1.25rem;
+  }
+
+  .kontakt-address {
+    font-size: 0.9rem;
+  }
+
+  .kontakt-anfahrt-btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .kontakt-map-container {
+    height: min(35vh, 280px);
+    min-height: 220px;
+  }
+}

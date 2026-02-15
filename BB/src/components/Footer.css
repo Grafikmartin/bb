@@ -16,14 +16,6 @@
   transition: transform 0.3s ease, margin-top 0.3s ease;
 }
 
-.app.portfolio-open .footer-section {
-  margin-top: calc(300px + var(--spacing-md, 2rem) + var(--spacing-xl, 6rem));
-}
-
-.app.portfolio-open .footer {
-  transform: translateY(calc(300px + var(--spacing-md, 2rem)));
-}
-
 .footer-text {
   font-size: 0.9rem;
   font-weight: 400;

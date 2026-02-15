@@ -219,7 +219,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .welcome-text {
-    font-size: clamp(2rem, 10vw, 4rem);
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
     letter-spacing: 0.005em;
   }
   

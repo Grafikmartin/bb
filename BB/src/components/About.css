@@ -106,3 +106,28 @@
 .about-text p:last-child {
   margin-bottom: var(--spacing-xl, 4rem);
 }
+
+@media (max-width: 768px) {
+  .about-text h2,
+  .about-title {
+    font-size: 1.25rem;
+  }
+
+  .about-text p {
+    font-size: 0.9rem;
+  }
+
+  .about-image {
+    width: 80px;
+    height: 80px;
+    max-width: 80px;
+    max-height: 80px;
+    margin-bottom: var(--spacing-sm, 1rem);
+  }
+
+  .more-button {
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem;
+    margin-bottom: 4rem;
+  }
+}

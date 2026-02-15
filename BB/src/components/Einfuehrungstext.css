@@ -75,3 +75,20 @@
 .einfuehrungstext-text p:last-child {
   margin-bottom: 0;
 }
+
+@media (max-width: 768px) {
+  .einfuehrungstext-text h2,
+  .einfuehrungstext-title {
+    font-size: 1.25rem;
+  }
+
+  .einfuehrungstext-text p {
+    font-size: 0.9rem;
+  }
+
+  .einfuehrungstext-images {
+    width: 50%;
+    height: 25vw;
+    margin-bottom: var(--spacing-sm, 1rem);
+  }
+}
