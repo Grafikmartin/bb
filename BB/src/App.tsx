@@ -30,12 +30,12 @@ function App() {
     }
   }, [canScroll])
 
-  // Prüfe ob Animation beendet ist (nach 2 Sekunden Fade-in + 500ms für Click-Hint)
+  // Scroll sofort erlauben (kein Klick mehr nötig)
   useEffect(() => {
     const timer = setTimeout(() => {
       setCanScroll(true)
       setShowScrollHint(true)
-    }, 2500) // 2 Sekunden Fade-in + 500ms Pause
+    }, 300)
 
     return () => clearTimeout(timer)
   }, [])

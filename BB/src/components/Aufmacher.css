@@ -1,3 +1,25 @@
+.aufmacher-heading {
+  text-align: left !important;
+  margin-left: 0 !important;
+  align-self: flex-start !important;
+}
+
+.aufmacher-heading .aufmacher-name,
+.aufmacher-heading .aufmacher-title {
+  text-align: left !important;
+}
+
+/* Blinkender Cursor wie bei Schreibmaschine / Editor */
+.aufmacher-cursor {
+  display: inline;
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 @keyframes pulse {
   0%, 100% {
     opacity: 0.6;
