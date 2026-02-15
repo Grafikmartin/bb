@@ -1,20 +1,27 @@
 .kontakt-section {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   position: relative;
   margin-top: 0;
   overflow: visible;
 }
 
-.kontakt-text {
-  text-align: left;
+.kontakt-content {
+  display: flex;
+  flex-direction: column;
   width: calc(47vw - 4rem);
   max-width: calc(100vw - 49vw - 4vw);
-  padding: 0 2rem var(--spacing-xl, 4rem) 0;
-  left: 49vw;
+  margin-left: 49vw;
   margin-top: var(--spacing-xl, 4rem);
+  padding: 0 2rem var(--spacing-xl, 4rem) 0;
   box-sizing: border-box;
-  position: relative;
+}
+
+.kontakt-text {
+  text-align: left;
+  width: 100%;
+  padding: 0 0 var(--spacing-md, 2rem) 0;
+  box-sizing: border-box;
 }
 
 .kontakt-title {
@@ -22,4 +29,62 @@
   font-weight: 700;
   color: var(--text-primary, #000000);
   margin: 0 0 var(--spacing-md, 2rem) 0;
+}
+
+.kontakt-address,
+.kontakt-item {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--text-primary, #000000);
+  margin: 0 0 var(--spacing-md, 2rem) 0;
+}
+
+.kontakt-text p:last-child {
+  margin-bottom: 0;
+}
+
+.kontakt-link {
+  color: var(--text-primary, #000000);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.kontakt-link:hover {
+  opacity: 0.7;
+}
+
+.kontakt-anfahrt-btn {
+  display: inline-block;
+  margin-top: var(--spacing-md, 2rem);
+  align-self: flex-start;
+  padding: 0.6rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--text-primary, #000000);
+  color: var(--text-primary, #000000);
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  text-decoration: none;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.kontakt-anfahrt-btn:hover {
+  background-color: var(--text-primary, #000000);
+  color: #ffffff;
+}
+
+.kontakt-map-container {
+  width: 100%;
+  height: 280px;
+  margin-top: var(--spacing-md, 2rem);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.kontakt-map {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: grayscale(70%) contrast(1.05) brightness(1.02);
 }

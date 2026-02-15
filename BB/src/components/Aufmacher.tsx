@@ -131,7 +131,9 @@ function Aufmacher() {
         }
       }, delay);
     };
-    tid = setTimeout(() => typeNext('name', 0), 80 + Math.random() * 60);
+    /* Start nach Ende der Strich-Animation (1.2s) */
+    const LINE_ANIMATION_MS = 1200;
+    tid = setTimeout(() => typeNext('name', 0), LINE_ANIMATION_MS + (Math.random() - 0.5) * 100);
     return () => clearTimeout(tid);
   }, []);
 
@@ -213,7 +215,7 @@ function Aufmacher() {
         top: '50%',
         left: '10vw',
         transform: 'translateY(-50%)',
-        zIndex: 300,
+        zIndex: 400,
       }}
     >
       {Array.from({ length: TOTAL_CIRCLES }, (_, index) => (
@@ -235,11 +237,13 @@ function Aufmacher() {
   const lineHeightVw = 2 * (ROWS * DIAMETER_VW + (ROWS - 1) * GAP_VW);
   const lineElement = typeof document !== 'undefined' && createPortal(
     <div
+      className="aufmacher-line"
       style={{
         position: 'fixed',
         left: 'calc(47vw - 1px)',
         top: '50%',
         transform: 'translateY(-50%)',
+        transformOrigin: 'center center',
         width: '2px',
         height: `${lineHeightVw}vw`,
         backgroundColor: '#000000',

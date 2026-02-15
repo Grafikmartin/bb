@@ -17,14 +17,21 @@
   position: relative;
 }
 
-.leistungen-text h2 {
+.leistungen-title {
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 700;
   color: var(--text-primary, #000000);
-  margin: var(--spacing-xl, 4rem) 0 var(--spacing-md, 2rem) 0;
+  margin: 0 0 var(--spacing-md, 2rem) 0;
 }
 
-.leistungen-text h2:first-child {
+.leistungen-subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 600;
+  color: var(--text-primary, #000000);
+  margin: var(--spacing-lg, 4rem) 0 var(--spacing-sm, 1rem) 0;
+}
+
+.leistungen-subtitle:first-of-type {
   margin-top: 0;
 }
 
@@ -33,8 +40,4 @@
   line-height: 1.6;
   color: var(--text-primary, #000000);
   margin: 0 0 var(--spacing-md, 2rem) 0;
-}
-
-.leistungen-text p:last-child {
-  margin-bottom: 0;
 }

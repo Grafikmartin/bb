@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import './About.css'
 import aboutImage from '../assets/image.png'
 
-function About() {
+function About({ id }: { id?: string }) {
   const [visibleParagraphs, setVisibleParagraphs] = useState<boolean[]>([false, false, false, false, false])
   const [showMore, setShowMore] = useState(false)
   const [scale, setScale] = useState(0.7)
@@ -99,7 +99,7 @@ function About() {
   }, [])
 
   return (
-    <section ref={aboutSectionRef} className="about-section">
+    <section ref={aboutSectionRef} id={id} className="about-section">
       <div
         className="about-spacer"
         style={{ minHeight: showMore ? '280vh' : '100vh' }}
@@ -125,21 +125,14 @@ function About() {
           zIndex: 350,
         }}
       >
-      <div
-        style={{
-          width: '100%',
-          minHeight: '100vh',
-          position: 'relative',
-          paddingBottom: showMore ? 'var(--spacing-xl, 4rem)' : 0,
-        }}
-      >
-      <img 
-        src={aboutImage} 
-        alt="Benjamin Borth" 
-        className="about-image"
-      />
-      <div className="about-text">
-        <h2 className="about-title">über mich</h2>
+      <div className="about-content">
+        <img 
+          src={aboutImage} 
+          alt="Benjamin Borth" 
+          className="about-image"
+        />
+        <div className="about-text">
+          <h2 className="about-title">Über mich</h2>
         <p 
           ref={(el) => { paragraphRefs.current[0] = el }}
           className={visibleParagraphs[0] ? 'visible' : ''}
@@ -152,14 +145,6 @@ function About() {
         >
           Mit eigener Familie weiß ich, wie anspruchsvoll der Alltag sein kann.
         </p>
-        {!showMore && (
-          <button 
-            className="more-button"
-            onClick={() => setShowMore(true)}
-          >
-            mehr
-          </button>
-        )}
         {showMore && (
           <>
             <p 
@@ -181,6 +166,14 @@ function About() {
               Mein Ziel: ein geschützter Raum, in dem Veränderung möglich wird und Sie neue Wege entwickeln können.
             </p>
           </>
+        )}
+        {!showMore && (
+          <button 
+            className="more-button"
+            onClick={() => setShowMore(true)}
+          >
+            mehr
+          </button>
         )}
       </div>
       </div>

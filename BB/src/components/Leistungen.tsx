@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './Leistungen.css'
 
-function Leistungen() {
+function Leistungen({ id }: { id?: string }) {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
@@ -42,7 +42,7 @@ function Leistungen() {
   }, [])
 
   return (
-    <section className="leistungen-section">
+    <section id={id} className="leistungen-section">
       <div
         className="leistungen-wrapper"
         style={{
@@ -64,20 +64,13 @@ function Leistungen() {
         }}
       >
       <div className="leistungen-text">
-        <h2>Hypnosetherapie</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </p>
-        
-        <h2>Gesprächstherapie</h2>
-        <p>
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        
-        <h2>Yoga und Meditation</h2>
-        <p>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-        </p>
+        <h2 className="leistungen-title">Leistungen</h2>
+        <h3 className="leistungen-subtitle">Hypnosetherapie</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <h3 className="leistungen-subtitle">Gesprächstherapie</h3>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <h3 className="leistungen-subtitle">Yoga und Meditation</h3>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
       </div>
       </div>
     </section>

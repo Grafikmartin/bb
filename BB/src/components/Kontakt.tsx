@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './Kontakt.css'
 
-function Kontakt() {
+function Kontakt({ id }: { id?: string }) {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
@@ -42,7 +42,7 @@ function Kontakt() {
   }, [])
 
   return (
-    <section className="kontakt-section">
+    <section id={id} className="kontakt-section">
       <div
         className="kontakt-wrapper"
         style={{
@@ -50,9 +50,10 @@ function Kontakt() {
           top: 0,
           left: 0,
           width: '100%',
-          height: '100vh',
+          minHeight: '100vh',
           display: 'flex',
-          alignItems: 'flex-start',
+          flexDirection: 'column',
+          alignItems: 'stretch',
           justifyContent: 'flex-start',
           backgroundColor: '#ffffff',
           padding: 'var(--spacing-xl, 4rem) 0',
@@ -63,9 +64,31 @@ function Kontakt() {
           zIndex: 370,
         }}
       >
-        <div className="kontakt-text">
-          <h2 className="kontakt-title">kontakt</h2>
-          {/* Hier kann später der Kontakt-Inhalt hinzugefügt werden */}
+        <div className="kontakt-content">
+          <div className="kontakt-text">
+            <h2 className="kontakt-title">Kontakt</h2>
+            <p className="kontakt-item">Tel.: <a href="tel:+4940555023456" className="kontakt-link">040 / 555 023 456</a></p>
+            <p className="kontakt-item">(E-Mail:) <a href="mailto:kontakt@benjaminborth.de" className="kontakt-link">kontakt@benjaminborth.de</a></p>
+            <p className="kontakt-address">Schöne Aussicht 1<br />20459 Hamburg</p>
+          </div>
+          <div className="kontakt-map-container">
+            <iframe
+              title="Karte Schöne Aussicht 1, Hamburg"
+              className="kontakt-map"
+              src="https://www.google.com/maps?q=Sch%C3%B6ne+Aussicht+1,+20459+Hamburg&z=15&output=embed"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+          <a
+            href="https://www.google.com/maps/dir//Sch%C3%B6ne+Aussicht+1,+20459+Hamburg"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="kontakt-anfahrt-btn"
+          >
+            Anfahrt
+          </a>
         </div>
       </div>
     </section>

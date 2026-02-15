@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './Einfuehrungstext.css'
 
-function Einfuehrungstext() {
+function Einfuehrungstext({ id }: { id?: string }) {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
@@ -42,7 +42,7 @@ function Einfuehrungstext() {
   }, [])
 
   return (
-    <section className="einfuehrungstext-section">
+    <section id={id} className="einfuehrungstext-section">
       <div
         className="einfuehrungstext-wrapper"
         style={{
@@ -64,16 +64,10 @@ function Einfuehrungstext() {
         }}
       >
       <div className="einfuehrungstext-text">
-        <h2 className="einfuehrungstext-title">praxis</h2>
-        <p>
-          In meiner Praxis begleite ich dich mit Hypnose und Gesprächstherapie zu mehr Ruhe, Klarheit und Lebensfreude.
-        </p>
-        <p>
-          In einem geschützten Raum bist du willkommen, so wie du bist.
-        </p>
-        <p>
-          Yoga und Meditation können die therapeutische Arbeit auf Wunsch ergänzen.
-        </p>
+        <h2 className="einfuehrungstext-title">Praxis</h2>
+        <p>In meiner Praxis begleite ich dich mit Hypnose und Gesprächstherapie zu mehr Ruhe, Klarheit und Lebensfreude.</p>
+        <p>In einem geschützten Raum bist du willkommen, so wie du bist.</p>
+        <p>Yoga und Meditation können die therapeutische Arbeit auf Wunsch ergänzen.</p>
       </div>
       </div>
     </section>

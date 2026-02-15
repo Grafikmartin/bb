@@ -9,7 +9,7 @@
   width: 100%;
   padding: var(--spacing-lg, 4rem) var(--spacing-md, 2rem);
   text-align: center;
-  background: var(--color-signal, #4dc3b5);
+  background: var(--color-coral, #7dd3c4);
   position: relative;
   z-index: 2001;
   transition: transform 0.3s ease, margin-top 0.3s ease;
@@ -29,4 +29,8 @@
   color: var(--text-primary, #2a2a2a);
   margin: 0;
   text-transform: lowercase;
+}
+
+.footer-bold {
+  font-weight: 700;
 }

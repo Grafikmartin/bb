@@ -1,3 +1,19 @@
+/* Vertikaler Strich – von der Mitte nach oben und unten sichtbar */
+.aufmacher-line {
+  animation: line-reveal 1.2s ease-out forwards;
+}
+
+@keyframes line-reveal {
+  0% {
+    transform: translateY(-50%) scaleY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(-50%) scaleY(1);
+    opacity: 1;
+  }
+}
+
 .aufmacher-heading {
   text-align: left !important;
   margin-left: 0 !important;

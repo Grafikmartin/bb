@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import Aufmacher from './components/Aufmacher'
+import HamburgerMenu from './components/HamburgerMenu'
 import Video from './components/Video'
 import Einfuehrungstext from './components/Einfuehrungstext'
 import About from './components/About'
@@ -41,16 +42,17 @@ function App() {
 
   return (
     <div className="app">
+      <HamburgerMenu />
       <section className="aufmacher-section">
         <div className="welcome-container">
           <Aufmacher />
         </div>
       </section>
       <Video />
-      <Einfuehrungstext />
-      <Leistungen />
-      <About />
-      <Kontakt />
+      <Einfuehrungstext id="praxis" />
+      <Leistungen id="leistungen" />
+      <About id="ueber-mich" />
+      <Kontakt id="kontakt" />
       <Footer />
       {showScrollHint && <ScrollHint />}
       <CursorFollower />

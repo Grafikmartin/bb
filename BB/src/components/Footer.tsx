@@ -39,7 +39,7 @@ function Footer() {
           zIndex: isSticky ? 380 : 2001,
         }}
       >
-        <p className="footer-text">© Martin Borth</p>
+        <p className="footer-text">Designed and developed by <strong className="footer-bold">media on borth</strong>.</p>
       </div>
     </footer>
   )
