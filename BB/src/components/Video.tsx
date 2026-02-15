@@ -9,63 +9,42 @@ function Video() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout
-    let lastScrollY = 0
+    let scrollTimeout: ReturnType<typeof setTimeout>
     const viewportHeight = window.innerHeight
-    const stickyPoint = viewportHeight // Video wird sticky bei 100vh
-
-    // Initiale Prüfung beim Mount - Video ist immer versteckt am Anfang
-    setIsVisible(false)
+    const stickyPoint = viewportHeight
 
     const updateScale = () => {
       const scrollY = window.scrollY
-      
-      // Video wird sichtbar, sobald gescrollt wird (erscheint von unten)
-      // Aber nur wenn wir noch nicht beim sticky-Punkt sind oder darüber
-      if (scrollY > 0 && scrollY < stickyPoint) {
-        setIsVisible(true)
-      } else if (scrollY >= stickyPoint) {
-        setIsVisible(true) // Bleibt sichtbar wenn sticky
-      } else {
-        setIsVisible(false) // Verschwindet wieder wenn zurück gescrollt wird
-      }
-      
-      // Prüfe ob Komponente sticky werden sollte (bei 100vh)
+      const visible = scrollY > 0
+      setIsVisible(visible)
       if (scrollY >= stickyPoint) {
         setIsSticky(true)
-        setScale(1.0) // Scale bleibt bei 1.0 wenn sticky
+        setScale(1.0)
       } else {
         setIsSticky(false)
-        // Komponente scrollt noch - Scale-Animation läuft von 70% auf 100%
         const scrollProgress = Math.min(scrollY / stickyPoint, 1)
-        const newScale = 0.7 + (scrollProgress * 0.3)
-        setScale(newScale)
+        setScale(0.7 + scrollProgress * 0.3)
       }
     }
 
     const handleScroll = () => {
-      if (!isScrolling) {
-        setIsScrolling(true)
-      }
-      
+      setIsScrolling(true)
       clearTimeout(scrollTimeout)
       updateScale()
-      
       scrollTimeout = setTimeout(() => {
         setIsScrolling(false)
         updateScale()
-      }, 100)
-      
-      lastScrollY = window.scrollY
+      }, 150)
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: false })
-    
+    updateScale()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
       clearTimeout(scrollTimeout)
     }
-  }, [isScrolling, isSticky])
+  }, [])
 
   return (
     <section 
