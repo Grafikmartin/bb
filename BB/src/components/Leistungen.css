@@ -57,15 +57,38 @@
 }
 
 @media (max-width: 768px) {
+  .leistungen-text {
+    left: 1rem;
+    width: calc(100% - 2rem - 2vw);
+    max-width: calc(100vw - 2rem - 2vw);
+    margin-left: 0;
+    padding: 0 2vw var(--spacing-xl, 4rem) 1rem;
+  }
+
   .leistungen-title {
     font-size: 1.25rem;
   }
 
   .leistungen-subtitle {
-    font-size: 1rem;
+    font-size: 0.95rem;
+    white-space: nowrap;
   }
 
   .leistungen-text p {
     font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .leistungen-title {
+    font-size: 1.1rem;
+  }
+
+  .leistungen-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .leistungen-text p {
+    font-size: 0.75rem;
   }
 }

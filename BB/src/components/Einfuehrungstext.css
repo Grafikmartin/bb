@@ -77,6 +77,14 @@
 }
 
 @media (max-width: 768px) {
+  .einfuehrungstext-text {
+    left: 1rem;
+    width: calc(100% - 2rem - 2vw);
+    max-width: calc(100vw - 2rem - 2vw);
+    margin-left: 0;
+    padding: 0 2vw var(--spacing-xl, 4rem) 1rem;
+  }
+
   .einfuehrungstext-text h2,
   .einfuehrungstext-title {
     font-size: 1.25rem;
@@ -87,8 +95,25 @@
   }
 
   .einfuehrungstext-images {
-    width: 50%;
-    height: 25vw;
+    width: calc(100% - 3vw);
+    max-width: calc(100% - 3vw);
+    height: 28vw;
     margin-bottom: var(--spacing-sm, 1rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .einfuehrungstext-text h2,
+  .einfuehrungstext-title {
+    font-size: 1.1rem;
+  }
+
+  .einfuehrungstext-text p {
+    font-size: 0.8rem;
+  }
+
+  .einfuehrungstext-images {
+    width: calc(100% - 3vw);
+    height: 35vw;
   }
 }

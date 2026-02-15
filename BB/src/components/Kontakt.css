@@ -105,6 +105,13 @@
 }
 
 @media (max-width: 768px) {
+  .kontakt-content {
+    margin-left: 1rem;
+    width: calc(100% - 2rem - 2vw);
+    max-width: calc(100vw - 2rem - 2vw);
+    padding: 0 2vw var(--spacing-xl, 4rem) 1rem;
+  }
+
   .kontakt-title {
     font-size: 1.25rem;
   }
@@ -119,7 +126,31 @@
   }
 
   .kontakt-map-container {
-    height: min(35vh, 280px);
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    margin-left: -1rem;
+    height: min(40vh, 320px);
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 480px) {
+  .kontakt-title {
+    font-size: 1.1rem;
+  }
+
+  .kontakt-address {
+    font-size: 0.8rem;
+  }
+
+  .kontakt-anfahrt-btn {
+    font-size: 0.8rem;
+  }
+
+  .kontakt-map-container {
+    width: calc(100vw - 2rem);
+    margin-left: -1rem;
+    height: min(45vh, 280px);
     min-height: 220px;
   }
 }

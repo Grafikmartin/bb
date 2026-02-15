@@ -108,9 +108,17 @@
 }
 
 @media (max-width: 768px) {
+  .about-content {
+    margin-left: 1rem;
+    width: calc(100% - 2rem - 2vw);
+    max-width: calc(100vw - 2rem - 2vw);
+    padding: 0 2vw var(--spacing-xl, 4rem) 1rem;
+  }
+
   .about-text h2,
   .about-title {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+    white-space: nowrap;
   }
 
   .about-text p {
@@ -129,5 +137,27 @@
     font-size: 0.85rem;
     padding: 0.4rem 1rem;
     margin-bottom: 4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-text h2,
+  .about-title {
+    font-size: 1rem;
+  }
+
+  .about-text p {
+    font-size: 0.75rem;
+  }
+
+  .about-image {
+    width: 64px;
+    height: 64px;
+    max-width: 64px;
+    max-height: 64px;
+  }
+
+  .more-button {
+    font-size: 0.8rem;
   }
 }
