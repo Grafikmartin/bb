@@ -6,6 +6,11 @@
   overflow: visible;
 }
 
+.about-wrapper {
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
 .about-spacer {
   /* Erzeugt Scrollraum, wenn Inhalt mit "mehr" erweitert wird */
   width: 100%;
@@ -34,6 +39,18 @@
   box-sizing: border-box;
 }
 
+.about-content-scrollable {
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.about-content-scrollable::-webkit-scrollbar {
+  display: none;
+}
+
 .about-image {
   width: 150px;
   height: 150px;
@@ -53,21 +70,22 @@
 }
 
 .more-button {
-  background: transparent;
-  border: 1px solid var(--text-primary, #000000);
+  background: #d8f2eb;
+  border: 1px solid transparent;
+  border-radius: 12px;
   color: var(--text-primary, #000000);
   padding: 0.5rem 1.5rem;
   font-size: clamp(0.9rem, 1.5vw, 1.1rem);
   cursor: pointer;
   margin-top: var(--spacing-md, 2rem);
-  margin-bottom: var(--spacing-md, 2rem);
+  margin-bottom: 6rem;
   transition: background-color 0.3s ease, color 0.3s ease;
   text-transform: lowercase;
 }
 
 .more-button:hover {
-  background-color: var(--text-primary, #000000);
-  color: var(--color-coral, #7dd3c4);
+  background-color: #caece4;
+  color: var(--text-primary, #000000);
 }
 
 .about-text p {
@@ -86,5 +104,5 @@
 }
 
 .about-text p:last-child {
-  margin-bottom: 0;
+  margin-bottom: var(--spacing-xl, 4rem);
 }

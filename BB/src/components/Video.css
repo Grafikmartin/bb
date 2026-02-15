@@ -6,6 +6,11 @@
   overflow: visible; /* Video darf bei fixed herausragen */
 }
 
+.video-wrapper {
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
 .video-element {
   position: absolute;
   top: 0;

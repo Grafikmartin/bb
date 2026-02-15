@@ -6,6 +6,11 @@
   overflow: visible;
 }
 
+.leistungen-wrapper {
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
 .leistungen-text {
   text-align: left;
   width: calc(47vw - 4rem);
@@ -40,4 +45,13 @@
   line-height: 1.6;
   color: var(--text-primary, #000000);
   margin: 0 0 var(--spacing-md, 2rem) 0;
+}
+
+.leistungen-scroll-area {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.leistungen-scroll-area::-webkit-scrollbar {
+  display: none;
 }

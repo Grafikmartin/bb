@@ -16,14 +16,15 @@
   width: 44px;
   height: 44px;
   padding: 10px;
-  background: transparent;
-  border: 1px solid var(--text-primary, #000000);
+  background: #d8f2eb;
+  border: 1px solid transparent;
+  border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .hamburger-button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: #caece4;
 }
 
 .hamburger-line {
@@ -47,8 +48,9 @@
   left: 10vw;
   display: flex;
   flex-direction: column;
-  background: var(--bg-primary, #ffffff);
-  border: 1px solid var(--text-primary, #000000);
+  background: #d8f2eb;
+  border: 1px solid transparent;
+  border-radius: 12px;
   padding: 0.5rem 0;
   min-width: 180px;
   z-index: 1001;
@@ -57,8 +59,10 @@
 
 .hamburger-nav-item {
   padding: 0.75rem 1.25rem;
+  margin: 0 0.5rem;
   background: none;
   border: none;
+  border-radius: 12px;
   font-size: 1rem;
   font-family: inherit;
   color: var(--text-primary, #000000);
@@ -68,6 +72,6 @@
 }
 
 .hamburger-nav-item:hover {
-  background-color: var(--color-coral, #7dd3c4);
+  background-color: #caece4;
   color: var(--text-primary, #000000);
 }

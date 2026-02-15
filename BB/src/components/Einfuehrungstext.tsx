@@ -1,10 +1,29 @@
 import { useState, useEffect } from 'react'
 import './Einfuehrungstext.css'
+import praxisImage1 from '../assets/image copy 2.png'
+import praxisImage2 from '../assets/image copy 3.png'
+import praxisImage3 from '../assets/image copy 4.png'
+import praxisImage4 from '../assets/image copy.png'
+
+const PRAXIS_IMAGES = [praxisImage1, praxisImage2, praxisImage3, praxisImage4]
 
 function Einfuehrungstext({ id }: { id?: string }) {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
+  const [imageIndex, setImageIndex] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsTransitioning(true)
+      setTimeout(() => {
+        setImageIndex((prev) => (prev + 1) % PRAXIS_IMAGES.length)
+        setIsTransitioning(false)
+      }, 1200)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     let scrollTimeout: ReturnType<typeof setTimeout>
@@ -65,6 +84,23 @@ function Einfuehrungstext({ id }: { id?: string }) {
       >
       <div className="einfuehrungstext-text">
         <h2 className="einfuehrungstext-title">Praxis</h2>
+        <div className="einfuehrungstext-images">
+          {PRAXIS_IMAGES.map((src, i) => {
+            const nextIndex = (imageIndex + 1) % PRAXIS_IMAGES.length
+            const isActive = i === imageIndex && !isTransitioning
+            const isEntering = isTransitioning && i === nextIndex
+            const isExiting = isTransitioning && i === imageIndex
+            const show = isActive || isEntering || isExiting
+            return (
+              <img
+                key={i}
+                src={src}
+                alt="Praxis"
+                className={`einfuehrungstext-image ${show ? 'visible' : ''} ${isEntering ? 'entering' : ''} ${isExiting ? 'exiting' : ''}`}
+              />
+            )
+          })}
+        </div>
         <p>In meiner Praxis begleite ich dich mit Hypnose und Gesprächstherapie zu mehr Ruhe, Klarheit und Lebensfreude.</p>
         <p>In einem geschützten Raum bist du willkommen, so wie du bist.</p>
         <p>Yoga und Meditation können die therapeutische Arbeit auf Wunsch ergänzen.</p>

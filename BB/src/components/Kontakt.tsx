@@ -1,24 +1,33 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Kontakt.css'
 
 function Kontakt({ id }: { id?: string }) {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
+  const aboutSectionRef = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    aboutSectionRef.current = document.getElementById('ueber-mich')
+  }, [])
 
   useEffect(() => {
     let scrollTimeout: ReturnType<typeof setTimeout>
     const viewportHeight = window.innerHeight
-    const stickyPoint = viewportHeight * 5
 
     const updateScale = () => {
       const scrollY = window.scrollY
+      const aboutSection = aboutSectionRef.current
+      const aboutBottom = aboutSection ? aboutSection.offsetTop + aboutSection.offsetHeight : viewportHeight * 5
+      const stickyPoint = aboutBottom
+      const scaleStart = aboutBottom - viewportHeight
+
       if (scrollY >= stickyPoint) {
         setIsSticky(true)
         setScale(1.0)
       } else {
         setIsSticky(false)
-        const scrollProgress = Math.min(Math.max((scrollY - viewportHeight * 4) / viewportHeight, 0), 1)
+        const scrollProgress = Math.min(Math.max((scrollY - scaleStart) / viewportHeight, 0), 1)
         setScale(0.7 + scrollProgress * 0.3)
       }
     }
@@ -50,10 +59,9 @@ function Kontakt({ id }: { id?: string }) {
           top: 0,
           left: 0,
           width: '100%',
-          minHeight: '100vh',
+          height: '100vh',
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'stretch',
+          alignItems: 'flex-start',
           justifyContent: 'flex-start',
           backgroundColor: '#ffffff',
           padding: 'var(--spacing-xl, 4rem) 0',
@@ -64,11 +72,11 @@ function Kontakt({ id }: { id?: string }) {
           zIndex: 370,
         }}
       >
-        <div className="kontakt-content">
+        <div className="kontakt-content kontakt-content-scrollable">
           <div className="kontakt-text">
             <h2 className="kontakt-title">Kontakt</h2>
             <p className="kontakt-item">Tel.: <a href="tel:+4940555023456" className="kontakt-link">040 / 555 023 456</a></p>
-            <p className="kontakt-item">(E-Mail:) <a href="mailto:kontakt@benjaminborth.de" className="kontakt-link">kontakt@benjaminborth.de</a></p>
+            <p className="kontakt-item">E-Mail: <a href="mailto:kontakt@benjaminborth.de" className="kontakt-link">kontakt@benjaminborth.de</a></p>
             <p className="kontakt-address">Schöne Aussicht 1<br />20459 Hamburg</p>
           </div>
           <div className="kontakt-map-container">

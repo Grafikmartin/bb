@@ -51,8 +51,10 @@ function Leistungen({ id }: { id?: string }) {
           left: 0,
           width: '100%',
           height: '100vh',
+          maxHeight: '100vh',
           display: 'flex',
-          alignItems: 'flex-start',
+          flexDirection: 'column',
+          alignItems: 'stretch',
           justifyContent: 'flex-start',
           backgroundColor: '#ffffff',
           padding: 'var(--spacing-xl, 4rem) 0',
@@ -63,6 +65,10 @@ function Leistungen({ id }: { id?: string }) {
           zIndex: 120,
         }}
       >
+      <div
+        className="leistungen-scroll-area"
+        style={{ flex: 1, minHeight: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}
+      >
       <div className="leistungen-text">
         <h2 className="leistungen-title">Leistungen</h2>
         <h3 className="leistungen-subtitle">Hypnosetherapie</h3>
@@ -71,6 +77,7 @@ function Leistungen({ id }: { id?: string }) {
         <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         <h3 className="leistungen-subtitle">Yoga und Meditation</h3>
         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+      </div>
       </div>
       </div>
     </section>

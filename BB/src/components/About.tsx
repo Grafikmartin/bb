@@ -62,6 +62,23 @@ function About({ id }: { id?: string }) {
     }
   }, [showMore])
 
+  // Absätze sichtbar machen, wenn Sektion aktiv ist (IntersectionObserver kann bei fixierter Ansicht scheitern)
+  useEffect(() => {
+    if (isSticky) {
+      setVisibleParagraphs(prev => {
+        const newState = [...prev]
+        newState[0] = true
+        newState[1] = true
+        if (showMore) {
+          newState[2] = true
+          newState[3] = true
+          newState[4] = true
+        }
+        return newState
+      })
+    }
+  }, [isSticky, showMore])
+
   // Scale-Animation beim Scrollen
   useEffect(() => {
     let scrollTimeout: ReturnType<typeof setTimeout>
@@ -125,7 +142,7 @@ function About({ id }: { id?: string }) {
           zIndex: 350,
         }}
       >
-      <div className="about-content">
+      <div className="about-content about-content-scrollable">
         <img 
           src={aboutImage} 
           alt="Benjamin Borth" 

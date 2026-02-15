@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   base: '/bb/',
   server: {
-    port: 5180,
+    port: 5182,
   },
 })
 

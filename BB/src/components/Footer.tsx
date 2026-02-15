@@ -33,7 +33,7 @@ function Footer() {
         className="footer"
         style={{
           position: isSticky ? 'fixed' : 'relative',
-          top: isSticky ? 0 : undefined,
+          bottom: isSticky ? 0 : undefined,
           left: isSticky ? 0 : undefined,
           width: isSticky ? '100%' : undefined,
           zIndex: isSticky ? 380 : 2001,
