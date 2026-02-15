@@ -75,9 +75,12 @@ function Kontakt({ id }: { id?: string }) {
         <div className="kontakt-content kontakt-content-scrollable">
           <div className="kontakt-text">
             <h2 className="kontakt-title">Kontakt</h2>
-            <p className="kontakt-item">Tel.: <a href="tel:+4940555023456" className="kontakt-link">040 / 555 023 456</a></p>
-            <p className="kontakt-item">E-Mail: <a href="mailto:kontakt@benjaminborth.de" className="kontakt-link">kontakt@benjaminborth.de</a></p>
-            <p className="kontakt-address">Schöne Aussicht 1<br />20459 Hamburg</p>
+            <p className="kontakt-address">
+              Praxis Benjamin Borth<br />
+              Tel.: <a href="tel:+4940555023456" className="kontakt-link">040 / 555 023 456</a><br />
+              E-Mail: <a href="mailto:kontakt@benjaminborth.de" className="kontakt-link">kontakt@benjaminborth.de</a><br />
+              Schöne Aussicht 1<br />20459 Hamburg
+            </p>
           </div>
           <div className="kontakt-map-container">
             <iframe

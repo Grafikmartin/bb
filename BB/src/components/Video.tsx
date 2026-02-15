@@ -1,12 +1,46 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Video.css'
-import videoSrc from '../assets/18420-292228405_small.mp4'
+import videoSrc1 from '../assets/22183-712840599_medium.mp4'
+import videoSrc2 from '../assets/18420-292228405_small.mp4'
+import videoSrc3 from '../assets/110790-688648716_medium.mp4'
+
+const VIDEO_SOURCES = [videoSrc1, videoSrc2, videoSrc3]
 
 function Video() {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
+
+  const handleVideoEnded = (index: number) => {
+    if (index !== currentVideoIndex) return
+    const nextIndex = (currentVideoIndex + 1) % VIDEO_SOURCES.length
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setCurrentVideoIndex(nextIndex)
+      setIsTransitioning(false)
+    }, 1200)
+  }
+
+  useEffect(() => {
+    if (isTransitioning) {
+      const nextIndex = (currentVideoIndex + 1) % VIDEO_SOURCES.length
+      const incomingVideo = videoRefs.current[nextIndex]
+      if (incomingVideo) {
+        incomingVideo.currentTime = 0
+        incomingVideo.play().catch(() => {})
+      }
+    } else {
+      const currentVideo = videoRefs.current[currentVideoIndex]
+      if (currentVideo && currentVideo.paused) {
+        currentVideo.currentTime = 0
+        currentVideo.play().catch(() => {})
+      }
+    }
+  }, [currentVideoIndex, isTransitioning])
 
   useEffect(() => {
     let scrollTimeout: ReturnType<typeof setTimeout>
@@ -70,16 +104,28 @@ function Video() {
           zIndex: 100,
         }}
       >
-        <video
-          src={videoSrc}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="video-element"
-        >
-          Ihr Browser unterstützt das Video-Element nicht.
-        </video>
+        <div className="video-stack">
+          {VIDEO_SOURCES.map((src, i) => {
+            const nextIdx = (currentVideoIndex + 1) % VIDEO_SOURCES.length
+            const isActive = i === currentVideoIndex && !isTransitioning
+            const isEntering = isTransitioning && i === nextIdx
+            const isExiting = isTransitioning && i === currentVideoIndex
+            const show = isActive || isEntering || isExiting
+            return (
+              <video
+                key={i}
+                ref={(el) => { videoRefs.current[i] = el }}
+                src={src}
+                muted
+                playsInline
+                className={`video-element ${show ? 'visible' : ''} ${isEntering ? 'entering' : ''} ${isExiting ? 'exiting' : ''}`}
+                onEnded={() => handleVideoEnded(i)}
+              >
+                Ihr Browser unterstützt das Video-Element nicht.
+              </video>
+            )
+          })}
+        </div>
       </div>
     </section>
   )

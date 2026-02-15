@@ -11,12 +11,35 @@
   overflow: hidden;
 }
 
+.video-stack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .video-element {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Füllt die gesamte Fläche aus, behält Seitenverhältnis bei */
+  object-fit: cover;
   display: block;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  pointer-events: none;
+}
+
+.video-element.visible {
+  opacity: 1;
+}
+
+.video-element.exiting {
+  opacity: 0;
+  z-index: 1;
+}
+
+.video-element.entering {
+  opacity: 1;
+  z-index: 2;
 }
