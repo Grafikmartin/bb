@@ -4,7 +4,6 @@ import Aufmacher from './components/Aufmacher'
 import Video from './components/Video'
 import Einfuehrungstext from './components/Einfuehrungstext'
 import About from './components/About'
-import Praxis from './components/Praxis'
 import Leistungen from './components/Leistungen'
 import Kontakt from './components/Kontakt'
 import ScrollHint from './components/ScrollHint'
@@ -51,7 +50,6 @@ function App() {
       <Einfuehrungstext />
       <Leistungen />
       <About />
-      <Praxis />
       <Kontakt />
       <Footer />
       {showScrollHint && <ScrollHint />}

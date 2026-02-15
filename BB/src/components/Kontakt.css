@@ -1,22 +1,25 @@
 .kontakt-section {
+  height: 100vh;
   width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-signal, #4dc3b5);
-  padding: var(--spacing-lg, 4rem) var(--spacing-md, 2rem);
+  position: relative;
+  margin-top: 0;
+  overflow: visible;
 }
 
-.kontakt-content {
-  max-width: 1200px;
-  width: 100%;
+.kontakt-text {
+  text-align: left;
+  width: calc(47vw - 4rem);
+  max-width: calc(100vw - 49vw - 4vw);
+  padding: 0 2rem var(--spacing-xl, 4rem) 0;
+  left: 49vw;
+  margin-top: var(--spacing-xl, 4rem);
+  box-sizing: border-box;
+  position: relative;
 }
 
 .kontakt-title {
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 500;
-  text-transform: lowercase;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
   color: var(--text-primary, #000000);
-  margin: 0;
+  margin: 0 0 var(--spacing-md, 2rem) 0;
 }

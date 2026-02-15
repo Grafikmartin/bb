@@ -1,15 +1,9 @@
 .leistungen-section {
   height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  background-color: #ffffff; /* Weißer Hintergrund */
-  padding: var(--spacing-xl, 4rem) 0;
-  position: sticky;
-  top: 0;
-  z-index: 120; /* Höher als Einführungstext (110) */
-  margin-top: 0; /* Direkt nach Einführungstext */
-  /* will-change wird dynamisch gesetzt */
+  width: 100%;
+  position: relative;
+  margin-top: 0;
+  overflow: visible;
 }
 
 .leistungen-text {

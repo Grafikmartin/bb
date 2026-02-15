@@ -1,18 +1,26 @@
+.footer-section {
+  width: 100%;
+  position: relative;
+  min-height: 80px;
+  margin-top: var(--spacing-xl, 6rem);
+}
+
 .footer {
   width: 100%;
   padding: var(--spacing-lg, 4rem) var(--spacing-md, 2rem);
   text-align: center;
-  background: var(--bg-primary, #f1e0ce);
+  background: var(--color-signal, #4dc3b5);
   position: relative;
   z-index: 2001;
-  margin-top: auto;
-  margin-top: var(--spacing-xl, 6rem);
   transition: transform 0.3s ease, margin-top 0.3s ease;
+}
+
+.app.portfolio-open .footer-section {
+  margin-top: calc(300px + var(--spacing-md, 2rem) + var(--spacing-xl, 6rem));
 }
 
 .app.portfolio-open .footer {
   transform: translateY(calc(300px + var(--spacing-md, 2rem)));
-  margin-top: var(--spacing-xl, 6rem);
 }
 
 .footer-text {

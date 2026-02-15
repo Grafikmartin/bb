@@ -1,15 +1,9 @@
 .praxis-section {
   height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  background-color: var(--color-coral, #7dd3c4);
-  padding: var(--spacing-xl, 4rem) 0;
-  position: sticky;
-  top: 0;
-  z-index: 360; /* Höher als About (350) */
-  margin-top: 0; /* Direkt nach About */
-  /* will-change wird dynamisch gesetzt */
+  width: 100%;
+  position: relative;
+  margin-top: 0;
+  overflow: visible;
 }
 
 .praxis-text {

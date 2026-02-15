@@ -7,60 +7,64 @@ function Einfuehrungstext() {
   const [isSticky, setIsSticky] = useState(false)
 
   useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout
+    let scrollTimeout: ReturnType<typeof setTimeout>
+    const viewportHeight = window.innerHeight
+    const stickyPoint = viewportHeight * 2
 
     const updateScale = () => {
       const scrollY = window.scrollY
-      const viewportHeight = window.innerHeight
-      
-      // Prüfe ob Komponente sticky werden sollte (bei 200vh)
-      if (scrollY >= viewportHeight * 2) {
+      if (scrollY >= stickyPoint) {
         setIsSticky(true)
-        setScale(1.0) // Scale bleibt bei 1.0 wenn sticky
+        setScale(1.0)
       } else {
         setIsSticky(false)
-        // Komponente scrollt noch - Scale-Animation läuft
         const scrollProgress = Math.min(Math.max((scrollY - viewportHeight) / viewportHeight, 0), 1)
-        const newScale = 0.7 + (scrollProgress * 0.3)
-        setScale(newScale)
+        setScale(0.7 + scrollProgress * 0.3)
       }
     }
 
     const handleScroll = () => {
-      if (!isScrolling) {
-        setIsScrolling(true)
-      }
-      
+      setIsScrolling(true)
       clearTimeout(scrollTimeout)
       updateScale()
-      
       scrollTimeout = setTimeout(() => {
         setIsScrolling(false)
         updateScale()
-      }, 100)
+      }, 150)
     }
 
+    updateScale()
     window.addEventListener('scroll', handleScroll, { passive: true })
-    
     return () => {
       window.removeEventListener('scroll', handleScroll)
       clearTimeout(scrollTimeout)
     }
-  }, [isScrolling])
+  }, [])
 
   return (
-    <section 
-      className="einfuehrungstext-section"
-      style={{
-        transform: isSticky ? 'none' : `scale(${scale})`,
-        transformOrigin: 'top center',
-        transition: isScrolling || isSticky ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-        willChange: isSticky ? 'auto' : 'transform',
-      }}
-    >
+    <section className="einfuehrungstext-section">
       <div
-        className="einfuehrungstext-text"
+        className="einfuehrungstext-wrapper"
+        style={{
+          position: isSticky ? 'fixed' : 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start',
+          backgroundColor: 'var(--color-coral, #7dd3c4)',
+          padding: 'var(--spacing-xl, 4rem) 0',
+          transform: isSticky ? 'none' : `scale(${scale})`,
+          transformOrigin: 'top center',
+          transition: isScrolling || isSticky ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+          willChange: isSticky ? 'auto' : 'transform',
+          zIndex: 110,
+        }}
       >
+      <div className="einfuehrungstext-text">
+        <h2 className="einfuehrungstext-title">praxis</h2>
         <p>
           In meiner Praxis begleite ich dich mit Hypnose und Gesprächstherapie zu mehr Ruhe, Klarheit und Lebensfreude.
         </p>
@@ -70,6 +74,7 @@ function Einfuehrungstext() {
         <p>
           Yoga und Meditation können die therapeutische Arbeit auf Wunsch ergänzen.
         </p>
+      </div>
       </div>
     </section>
   )

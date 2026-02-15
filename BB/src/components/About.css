@@ -1,15 +1,28 @@
 .about-section {
-  height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  background-color: var(--color-coral, #7dd3c4); /* Mint-Hintergrund */
-  padding: var(--spacing-xl, 4rem) 0;
-  position: sticky;
-  top: 0;
-  z-index: 350; /* Höher als Punkte (300) und Leistungen (120) */
-  margin-top: 0; /* Direkt nach Leistungen */
-  /* will-change wird dynamisch gesetzt */
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  margin-top: 0;
+  overflow: visible;
+}
+
+.about-spacer {
+  /* Erzeugt Scrollraum, wenn Inhalt mit "mehr" erweitert wird */
+  width: 100%;
+  pointer-events: none;
+}
+
+.about-text h2,
+.about-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--text-primary, #000000);
+  margin: 0 0 var(--spacing-md, 2rem) 0;
+}
+
+.about-text h2:first-child,
+.about-title {
+  margin-top: 0;
 }
 
 .about-image {

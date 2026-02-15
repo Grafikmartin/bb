@@ -47,29 +47,27 @@ function Video() {
   }, [])
 
   return (
-    <section 
-      className="video-section"
-      style={{
-        transform: isSticky 
-          ? 'none' 
-          : isVisible 
-            ? `scale(${scale}) translateY(0)` 
-            : `scale(${scale}) translateY(100vh)`,
-        transformOrigin: 'top center',
-        transition: isScrolling || isSticky ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-        willChange: isSticky ? 'auto' : 'transform',
-        opacity: isVisible ? 1 : 0,
-        visibility: isVisible ? 'visible' : 'hidden',
-        pointerEvents: isVisible ? 'auto' : 'none',
-        zIndex: isSticky ? 100 : 100, // Video bleibt bei z-index 100, Einführungstext (110) schiebt sich darüber
-      }}
-    >
+    <section className="video-section">
       <div
         className="video-wrapper"
         style={{
+          position: isSticky ? 'fixed' : 'absolute',
+          top: 0,
+          left: 0,
           width: '100%',
           height: '100vh',
-          position: 'relative',
+          transform: isSticky 
+            ? 'none' 
+            : isVisible 
+              ? `scale(${scale}) translateY(0)` 
+              : `scale(${scale}) translateY(100vh)`,
+          transformOrigin: 'top center',
+          transition: isScrolling || isSticky ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+          willChange: isSticky ? 'auto' : 'transform',
+          opacity: isVisible ? 1 : 0,
+          visibility: isVisible ? 'visible' : 'hidden',
+          pointerEvents: isVisible ? 'auto' : 'none',
+          zIndex: 100,
         }}
       >
         <video
