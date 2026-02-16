@@ -26,14 +26,14 @@
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 700;
   color: var(--text-primary, #000000);
-  margin: 0 0 var(--spacing-md, 2rem) 0;
+  margin: 0 0 1rem 0;
 }
 
 .leistungen-subtitle {
   font-size: clamp(1.1rem, 2vw, 1.35rem);
   font-weight: 600;
   color: var(--text-primary, #000000);
-  margin: var(--spacing-lg, 4rem) 0 var(--spacing-sm, 1rem) 0;
+  margin: 2rem 0 0.5rem 0;
 }
 
 .leistungen-subtitle:first-of-type {
@@ -44,7 +44,7 @@
   font-size: clamp(1rem, 2vw, 1.25rem);
   line-height: 1.6;
   color: var(--text-primary, #000000);
-  margin: 0 0 var(--spacing-md, 2rem) 0;
+  margin: 0 0 1rem 0;
 }
 
 .leistungen-scroll-area {

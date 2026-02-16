@@ -22,7 +22,7 @@
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 700;
   color: var(--text-primary, #000000);
-  margin: 0 0 var(--spacing-md, 2rem) 0;
+  margin: 0 0 1rem 0;
 }
 
 .about-text h2:first-child,
@@ -59,7 +59,7 @@
   border-radius: 50%;
   object-fit: cover;
   display: block;
-  margin-bottom: var(--spacing-md, 2rem);
+  margin-bottom: 1rem;
   flex-shrink: 0;
 }
 
@@ -77,8 +77,8 @@
   padding: 0.5rem 1.5rem;
   font-size: clamp(0.9rem, 1.5vw, 1.1rem);
   cursor: pointer;
-  margin-top: var(--spacing-md, 2rem);
-  margin-bottom: 6rem;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
   transition: background-color 0.3s ease, color 0.3s ease;
   text-transform: lowercase;
 }
@@ -92,7 +92,7 @@
   font-size: clamp(1rem, 2vw, 1.25rem);
   line-height: 1.6;
   color: var(--text-primary, #000000);
-  margin: 0 0 var(--spacing-md, 2rem) 0;
+  margin: 0 0 1rem 0;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 1s ease-out, transform 1s ease-out;
@@ -104,7 +104,7 @@
 }
 
 .about-text p:last-child {
-  margin-bottom: var(--spacing-xl, 4rem);
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 768px) {
@@ -130,13 +130,13 @@
     height: 80px;
     max-width: 80px;
     max-height: 80px;
-    margin-bottom: var(--spacing-sm, 1rem);
+    margin-bottom: 0.5rem;
   }
 
   .more-button {
     font-size: 0.85rem;
     padding: 0.4rem 1rem;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
   }
 
   .about-wrapper {

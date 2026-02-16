@@ -63,13 +63,18 @@ function Einfuehrungstext({ id }: { id?: string }) {
   return (
     <section id={id} className="einfuehrungstext-section">
       <div
+        className="einfuehrungstext-spacer"
+        style={{ minHeight: '100vh' }}
+        aria-hidden="true"
+      />
+      <div
         className="einfuehrungstext-wrapper"
         style={{
           position: isSticky ? 'fixed' : 'absolute',
           top: 0,
           left: 0,
           width: '100%',
-          height: '100vh',
+          minHeight: '100vh',
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'flex-start',
@@ -82,7 +87,7 @@ function Einfuehrungstext({ id }: { id?: string }) {
           zIndex: 110,
         }}
       >
-      <div className="einfuehrungstext-text">
+      <div className="einfuehrungstext-text einfuehrungstext-text-scrollable">
         <h2 className="einfuehrungstext-title">Praxis</h2>
         <div className="einfuehrungstext-images">
           {PRAXIS_IMAGES.map((src, i) => {

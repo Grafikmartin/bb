@@ -1,9 +1,14 @@
 .einfuehrungstext-section {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   position: relative;
   margin-top: 0;
   overflow: visible;
+}
+
+.einfuehrungstext-spacer {
+  width: 100%;
+  pointer-events: none;
 }
 
 .einfuehrungstext-wrapper {
@@ -15,11 +20,23 @@
   text-align: left;
   width: calc(47vw - 4rem);
   max-width: calc(100vw - 49vw - 4vw);
-  padding: 0 2rem var(--spacing-xl, 4rem) 0;
+  padding: 0 2rem 200px 0;
   left: 49vw;
   margin-top: var(--spacing-xl, 4rem);
   box-sizing: border-box;
   position: relative;
+}
+
+.einfuehrungstext-text-scrollable {
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.einfuehrungstext-text-scrollable::-webkit-scrollbar {
+  display: none;
 }
 
 .einfuehrungstext-text h2,
@@ -27,13 +44,13 @@
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 700;
   color: var(--text-primary, #000000);
-  margin: 0 0 var(--spacing-md, 2rem) 0;
+  margin: 0 0 1rem 0;
 }
 
 .einfuehrungstext-images {
   width: 25vw;
   height: 18vw;
-  margin-bottom: var(--spacing-md, 2rem);
+  margin-bottom: 1rem;
   border-radius: 12px;
   overflow: hidden;
   position: relative;
@@ -69,7 +86,7 @@
   font-size: clamp(1rem, 2vw, 1.25rem);
   line-height: 1.6;
   color: var(--text-primary, #000000);
-  margin: 0 0 var(--spacing-md, 2rem) 0;
+  margin: 0 0 1rem 0;
 }
 
 .einfuehrungstext-text p:last-child {
@@ -98,7 +115,7 @@
     width: 80vw;
     max-width: 80vw;
     height: 28vw;
-    margin-bottom: var(--spacing-sm, 1rem);
+    margin-bottom: 0.5rem;
   }
 
   .einfuehrungstext-wrapper {

@@ -303,7 +303,7 @@ function Aufmacher() {
           </span>
         ))}
       </div>
-      <div className="aufmacher-title" style={{ width: '100%', maxWidth: '100%', fontSize: '0.55em', fontWeight: 200, letterSpacing: '0.02em', marginTop: '0.25em', marginLeft: '0.15em', lineHeight: 1.4, textAlign: 'left', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+      <div className="aufmacher-title" style={{ width: '100%', maxWidth: '100%', fontSize: '0.55em', fontWeight: 200, letterSpacing: '0.02em', marginTop: '0.25em', marginLeft: 'calc(0.15em - 0.05vw)', lineHeight: 1.4, textAlign: 'left', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
         {visibleCount.name >= NAME.length && visibleCount.titleLine1 === 0 && (
           <span className="aufmacher-cursor">|</span>
         )}
@@ -316,7 +316,7 @@ function Aufmacher() {
           </span>
         ))}
       </div>
-      <div className="aufmacher-title" style={{ width: '100%', maxWidth: '100%', fontSize: '0.55em', fontWeight: 200, letterSpacing: '0.02em', marginLeft: '0.15em', lineHeight: 1.4, textAlign: 'left', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+      <div className="aufmacher-title" style={{ width: '100%', maxWidth: '100%', fontSize: '0.55em', fontWeight: 200, letterSpacing: '0.02em', marginLeft: 'calc(0.15em - 0.05vw)', lineHeight: 1.4, textAlign: 'left', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
         {visibleCount.titleLine1 >= TITLE_LINE1.length && visibleCount.titleLine2 === 0 && (
           <span className="aufmacher-cursor">|</span>
         )}
