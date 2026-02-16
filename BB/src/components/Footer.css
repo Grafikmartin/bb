@@ -27,3 +27,13 @@
 .footer-bold {
   font-weight: 700;
 }
+
+@media (max-width: 768px) {
+  .footer-section {
+    min-height: 28px;
+  }
+
+  .footer {
+    padding: 1rem var(--spacing-md, 2rem);
+  }
+}

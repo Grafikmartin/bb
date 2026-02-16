@@ -106,10 +106,10 @@
 
 @media (max-width: 768px) {
   .kontakt-content {
-    margin-left: 1rem;
-    width: calc(100% - 2rem - 2vw);
-    max-width: calc(100vw - 2rem - 2vw);
-    padding: 0 2vw var(--spacing-xl, 4rem) 1rem;
+    margin-left: 10vw;
+    width: 80vw;
+    max-width: 80vw;
+    padding: 0 0 var(--spacing-xl, 4rem) 0;
   }
 
   .kontakt-title {
@@ -126,11 +126,15 @@
   }
 
   .kontakt-map-container {
-    width: calc(100vw - 2rem);
-    max-width: calc(100vw - 2rem);
-    margin-left: -1rem;
+    width: 80vw;
+    max-width: 80vw;
+    margin-left: 0;
     height: min(40vh, 320px);
     min-height: 260px;
+  }
+
+  .kontakt-wrapper {
+    z-index: 500 !important;
   }
 }
 
@@ -148,8 +152,7 @@
   }
 
   .kontakt-map-container {
-    width: calc(100vw - 2rem);
-    margin-left: -1rem;
+    width: 80vw;
     height: min(45vh, 280px);
     min-height: 220px;
   }

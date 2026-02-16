@@ -109,10 +109,10 @@
 
 @media (max-width: 768px) {
   .about-content {
-    margin-left: 1rem;
-    width: calc(100% - 2rem - 2vw);
-    max-width: calc(100vw - 2rem - 2vw);
-    padding: 0 2vw var(--spacing-xl, 4rem) 1rem;
+    margin-left: 10vw;
+    width: 80vw;
+    max-width: 80vw;
+    padding: 0 0 var(--spacing-xl, 4rem) 0;
   }
 
   .about-text h2,
@@ -137,6 +137,10 @@
     font-size: 0.85rem;
     padding: 0.4rem 1rem;
     margin-bottom: 4rem;
+  }
+
+  .about-wrapper {
+    z-index: 500 !important;
   }
 }
 

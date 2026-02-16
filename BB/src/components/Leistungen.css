@@ -58,11 +58,11 @@
 
 @media (max-width: 768px) {
   .leistungen-text {
-    left: 1rem;
-    width: calc(100% - 2rem - 2vw);
-    max-width: calc(100vw - 2rem - 2vw);
+    left: 10vw;
+    width: 80vw;
+    max-width: 80vw;
     margin-left: 0;
-    padding: 0 2vw var(--spacing-xl, 4rem) 1rem;
+    padding: 0;
   }
 
   .leistungen-title {
@@ -76,6 +76,10 @@
 
   .leistungen-text p {
     font-size: 0.9rem;
+  }
+
+  .leistungen-wrapper {
+    z-index: 500 !important;
   }
 }
 

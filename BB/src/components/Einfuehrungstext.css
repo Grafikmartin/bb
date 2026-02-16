@@ -78,11 +78,11 @@
 
 @media (max-width: 768px) {
   .einfuehrungstext-text {
-    left: 1rem;
-    width: calc(100% - 2rem - 2vw);
-    max-width: calc(100vw - 2rem - 2vw);
+    left: 10vw;
+    width: 80vw;
+    max-width: 80vw;
     margin-left: 0;
-    padding: 0 2vw var(--spacing-xl, 4rem) 1rem;
+    padding: 0 0 var(--spacing-xl, 4rem) 0;
   }
 
   .einfuehrungstext-text h2,
@@ -95,10 +95,14 @@
   }
 
   .einfuehrungstext-images {
-    width: calc(100% - 3vw);
-    max-width: calc(100% - 3vw);
+    width: 80vw;
+    max-width: 80vw;
     height: 28vw;
     margin-bottom: var(--spacing-sm, 1rem);
+  }
+
+  .einfuehrungstext-wrapper {
+    z-index: 500 !important;
   }
 }
 
@@ -113,7 +117,7 @@
   }
 
   .einfuehrungstext-images {
-    width: calc(100% - 3vw);
+    width: 80vw;
     height: 35vw;
   }
 }
