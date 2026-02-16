@@ -21,6 +21,9 @@
   --icon-color: #000000;
   --scroll-color: #000000;
   
+  /* Linker Rand für Aufmacher-Punkte und Hamburger-Menü (einheitlich 10vw) */
+  --content-start: 10vw;
+
   /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;

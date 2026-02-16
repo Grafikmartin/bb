@@ -213,7 +213,7 @@ function Aufmacher() {
         gap: `${GAP_VW}vw`,
         position: 'fixed',
         top: '50%',
-        left: '10vw',
+        left: 'var(--content-start, 10vw)',
         transform: 'translateY(-50%)',
         zIndex: 400,
       }}

@@ -103,6 +103,17 @@
   overflow-y: visible;
 }
 
+/* Menü offen: scrollender Inhalt über fixiertem Aufmacher, damit Video/Inhalt durch transparenten Menühintergrund sichtbar ist */
+body.hamburger-menu-open .video-section,
+body.hamburger-menu-open .einfuehrungstext-section,
+body.hamburger-menu-open .about-section,
+body.hamburger-menu-open .leistungen-section,
+body.hamburger-menu-open .kontakt-section,
+body.hamburger-menu-open .footer-section {
+  position: relative;
+  z-index: 100;
+}
+
 .welcome-text {
   font-size: var(--font-size-hero);
   font-weight: 900;

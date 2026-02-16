@@ -1,8 +1,12 @@
 .hamburger-menu {
   position: fixed;
+  left: 10vw;
+  top: 3vh;
   z-index: 1000;
   pointer-events: none;
   background: transparent;
+  padding: 0;
+  margin: 0;
 }
 
 .hamburger-menu > * {
@@ -14,15 +18,20 @@
   flex-direction: column;
   justify-content: center;
   gap: 6px;
-  width: 44px;
-  height: 44px;
-  padding: 10px 10px 10px 0;
+  width: auto;
+  min-width: 24px;
+  height: auto;
+  min-height: 22px;
+  /* Kein linkes Padding – Striche beginnen exakt bei 10vw; rechts/oben/unten für Klickfläche */
+  padding: 11px 11px 11px 0;
+  margin: 0;
   background: transparent !important;
   background-color: transparent !important;
   border: none !important;
   border-radius: 0;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  box-sizing: content-box;
 }
 
 .hamburger-button:hover {
@@ -32,7 +41,7 @@
 
 .hamburger-line {
   display: block;
-  width: 100%;
+  width: 24px;
   height: 2px;
   background: var(--text-primary, #000000);
   transition: transform 0.3s ease, background 0.2s ease;
@@ -51,7 +60,8 @@
   left: 10vw;
   display: flex;
   flex-direction: column;
-  background: #d8f2eb;
+  background: rgba(216, 242, 235, 0.45) !important;
+  background-color: rgba(216, 242, 235, 0.45) !important;
   border: 1px solid transparent;
   border-radius: 12px;
   padding: 0.5rem 0;

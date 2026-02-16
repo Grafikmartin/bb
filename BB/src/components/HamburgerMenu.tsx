@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import './HamburgerMenu.css'
 
 const MENU_ITEMS = [
-  { label: 'Praxis', id: 'praxis' },
+  { label: 'Die Praxis', id: 'praxis' }, /* Test: „Die Praxis“ = aktuelle Version */
   { label: 'Leistungen', id: 'leistungen' },
   { label: 'Über mich', id: 'ueber-mich' },
   { label: 'Kontakt', id: 'kontakt' },
@@ -29,6 +29,16 @@ function HamburgerMenu() {
     }
   }, [])
 
+  // Wenn Menü offen: scrollender Inhalt über Aufmacher, damit Video/Inhalt durch transparenten Menühintergrund sichtbar ist
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('hamburger-menu-open')
+    } else {
+      document.body.classList.remove('hamburger-menu-open')
+    }
+    return () => document.body.classList.remove('hamburger-menu-open')
+  }, [isOpen])
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id)
     if (el) {
@@ -38,7 +48,7 @@ function HamburgerMenu() {
   }
 
   return (
-    <div className="hamburger-menu" style={{ left: '10vw', top: '3vh' }}>
+    <div className="hamburger-menu">
       <button
         className="hamburger-button"
         onClick={() => setIsOpen(!isOpen)}
