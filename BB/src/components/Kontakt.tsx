@@ -86,7 +86,7 @@ function Kontakt({ id }: { id?: string }) {
             <iframe
               title="Karte Schöne Aussicht 1, Hamburg"
               className="kontakt-map"
-              src="https://www.google.com/maps?q=Sch%C3%B6ne+Aussicht+1,+20459+Hamburg&z=15&output=embed"
+              src="https://www.google.com/maps?q=Sch%C3%B6ne+Aussicht+1,+20459+Hamburg&z=15&output=embed&t=k"
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

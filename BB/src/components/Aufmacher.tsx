@@ -18,6 +18,16 @@ const getMintColors = (): string[] => {
   ];
 };
 
+/** Farbpalette für die Kreise (20×9) mit Transparenz: coral 10%, sky 20%, gold 30%, #d8f2eb 40%, #ebf8f4 50% */
+const getCircleMintColors = (): string[] => [
+  'rgba(77, 195, 181, 1)',       /* signal, deckend */
+  'rgba(125, 211, 196, 0.9)',     /* coral, 10% transparent */
+  'rgba(160, 223, 209, 0.8)',     /* sky, 20% transparent */
+  'rgba(197, 235, 226, 0.7)',     /* gold, 30% transparent */
+  'rgba(216, 242, 235, 0.6)',     /* #d8f2eb, 40% transparent */
+  'rgba(235, 248, 244, 0.5)',     /* #ebf8f4, 50% transparent */
+];
+
 /** Name der Person */
 const NAME = 'Benjamin Borth';
 /** Titel (Heilpraktiker für …) – in zwei Zeilen */
@@ -74,20 +84,20 @@ function isOutermostArea(index: number): boolean {
 }
 
 function getInitialColors(): string[] {
-  const lightestColors = ['#d8f2eb', '#ebf8f4'];
-  const outerColors = ['#7dd3c4', '#a0dfd1', '#c5ebe2', '#d8f2eb', '#ebf8f4'];
-  const allColors = getMintColors();
-  const allColorsWithWhite = [...allColors, '#ffffff'];
+  const circleColors = getCircleMintColors();
+  const lightestColors = [circleColors[4], circleColors[5]]; /* 40% und 50% transparent */
+  const outerColors = circleColors.slice(1); /* coral … ebf8f4 mit Transparenz */
+  const allColorsWithWhite = [...circleColors, 'transparent'];
 
   return Array.from({ length: TOTAL_CIRCLES }, (_, index) => {
     if (isLightColorArea(index)) {
       return lightestColors[Math.floor(Math.random() * lightestColors.length)];
     }
     if (isOutermostArea(index)) {
-      return Math.random() < 0.85 ? '#ffffff' : outerColors[Math.floor(Math.random() * outerColors.length)];
+      return Math.random() < 0.85 ? 'transparent' : outerColors[Math.floor(Math.random() * outerColors.length)];
     }
     if (isOuterRowArea(index)) {
-      return Math.random() < 0.6 ? '#ffffff' : outerColors[Math.floor(Math.random() * outerColors.length)];
+      return Math.random() < 0.6 ? 'transparent' : outerColors[Math.floor(Math.random() * outerColors.length)];
     }
     return allColorsWithWhite[Math.floor(Math.random() * allColorsWithWhite.length)];
   });
@@ -163,24 +173,24 @@ function Aufmacher() {
     const changeColor = (index: number) => {
       setCircleColors(prev => {
         const newColors = [...prev];
-        const lightestColors = ['#d8f2eb', '#ebf8f4'];
-        const outerColors = ['#7dd3c4', '#a0dfd1', '#c5ebe2', '#d8f2eb', '#ebf8f4'];
+        const circleColors = getCircleMintColors();
+        const lightestColors = [circleColors[4], circleColors[5]];
+        const outerColors = circleColors.slice(1);
+        const withWhite = [...circleColors, 'transparent'];
 
         if (isLightColorArea(index)) {
-          newColors[index] = Math.random() < 0.2 ? '#ffffff' : lightestColors[Math.floor(Math.random() * lightestColors.length)];
+          newColors[index] = Math.random() < 0.2 ? 'transparent' : lightestColors[Math.floor(Math.random() * lightestColors.length)];
           return newColors;
         }
         if (isOutermostArea(index)) {
-          newColors[index] = Math.random() < 0.85 ? '#ffffff' : outerColors[Math.floor(Math.random() * outerColors.length)];
+          newColors[index] = Math.random() < 0.85 ? 'transparent' : outerColors[Math.floor(Math.random() * outerColors.length)];
           return newColors;
         }
         if (isOuterRowArea(index)) {
-          newColors[index] = Math.random() < 0.6 ? '#ffffff' : outerColors[Math.floor(Math.random() * outerColors.length)];
+          newColors[index] = Math.random() < 0.6 ? 'transparent' : outerColors[Math.floor(Math.random() * outerColors.length)];
           return newColors;
         }
-        const allColors = getMintColors();
-        const withWhite = [...allColors, '#ffffff'];
-        newColors[index] = Math.random() < 0.3 ? '#ffffff' : withWhite[Math.floor(Math.random() * withWhite.length)];
+        newColors[index] = Math.random() < 0.3 ? 'transparent' : withWhite[Math.floor(Math.random() * withWhite.length)];
         return newColors;
       });
     };
@@ -226,7 +236,7 @@ function Aufmacher() {
             width: `${DIAMETER_VW}vw`,
             height: `${DIAMETER_VW}vw`,
             borderRadius: '50%',
-            backgroundColor: circleColors[index] || '#4dc3b5',
+            backgroundColor: circleColors[index] || getCircleMintColors()[0],
             transition: 'background-color 1s ease-in-out',
           }}
         />
