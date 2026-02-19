@@ -63,7 +63,6 @@ function One({ id }: { id?: string }) {
 
   return (
     <section id={id} className="einfuehrungstext-section">
-      <SectionDots />
       <div
         className="einfuehrungstext-spacer"
         style={{ minHeight: '100vh' }}
@@ -89,6 +88,7 @@ function One({ id }: { id?: string }) {
           zIndex: 110,
         }}
       >
+      <SectionDots />
       <div className="einfuehrungstext-text einfuehrungstext-text-scrollable">
         <h2 className="einfuehrungstext-title">Praxis</h2>
         <div className="einfuehrungstext-images">

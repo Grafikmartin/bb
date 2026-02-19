@@ -44,7 +44,6 @@ function Two({ id }: { id?: string }) {
 
   return (
     <section id={id} className="leistungen-section">
-      <SectionDots />
       <div
         className="leistungen-wrapper"
         style={{
@@ -67,6 +66,7 @@ function Two({ id }: { id?: string }) {
           zIndex: 120,
         }}
       >
+      <SectionDots />
       <div
         className="leistungen-scroll-area"
         style={{ flex: 1, minHeight: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}

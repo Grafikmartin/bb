@@ -118,7 +118,6 @@ function Three({ id }: { id?: string }) {
 
   return (
     <section ref={aboutSectionRef} id={id} className="about-section">
-      <SectionDots />
       <div
         className="about-spacer"
         style={{ minHeight: showMore ? '280vh' : '100vh' }}
@@ -144,6 +143,7 @@ function Three({ id }: { id?: string }) {
           zIndex: 350,
         }}
       >
+      <SectionDots />
       <div className="about-content about-content-scrollable">
         <img 
           src={aboutImage} 

@@ -53,7 +53,6 @@ function Four({ id }: { id?: string }) {
 
   return (
     <section id={id} className="kontakt-section">
-      <SectionDots />
       <div
         className="kontakt-wrapper"
         style={{
@@ -74,6 +73,7 @@ function Four({ id }: { id?: string }) {
           zIndex: 370,
         }}
       >
+      <SectionDots />
         <div className="kontakt-content kontakt-content-scrollable">
           <div className="kontakt-text">
             <h2 className="kontakt-title">Kontakt</h2>
