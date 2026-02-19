@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
-import './About.css'
+import './3.css'
+import SectionDots from './SectionDots'
 import aboutImage from '../assets/image.png'
 
-function About({ id }: { id?: string }) {
+function Three({ id }: { id?: string }) {
   const [visibleParagraphs, setVisibleParagraphs] = useState<boolean[]>([false, false, false, false, false])
   const [showMore, setShowMore] = useState(false)
   const [scale, setScale] = useState(0.7)
@@ -117,6 +118,7 @@ function About({ id }: { id?: string }) {
 
   return (
     <section ref={aboutSectionRef} id={id} className="about-section">
+      <SectionDots />
       <div
         className="about-spacer"
         style={{ minHeight: showMore ? '280vh' : '100vh' }}
@@ -199,4 +201,4 @@ function About({ id }: { id?: string }) {
   )
 }
 
-export default About
+export default Three

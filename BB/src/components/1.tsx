@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import './Einfuehrungstext.css'
+import './1.css'
+import SectionDots from './SectionDots'
 import praxisImage1 from '../assets/image copy 2.png'
 import praxisImage2 from '../assets/image copy 3.png'
 import praxisImage3 from '../assets/image copy 4.png'
@@ -7,7 +8,7 @@ import praxisImage4 from '../assets/image copy.png'
 
 const PRAXIS_IMAGES = [praxisImage1, praxisImage2, praxisImage3, praxisImage4]
 
-function Einfuehrungstext({ id }: { id?: string }) {
+function One({ id }: { id?: string }) {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
@@ -62,6 +63,7 @@ function Einfuehrungstext({ id }: { id?: string }) {
 
   return (
     <section id={id} className="einfuehrungstext-section">
+      <SectionDots />
       <div
         className="einfuehrungstext-spacer"
         style={{ minHeight: '100vh' }}
@@ -115,4 +117,4 @@ function Einfuehrungstext({ id }: { id?: string }) {
   )
 }
 
-export default Einfuehrungstext
+export default One

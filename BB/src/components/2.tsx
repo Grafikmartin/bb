@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import './Leistungen.css'
+import './2.css'
+import SectionDots from './SectionDots'
 
-function Leistungen({ id }: { id?: string }) {
+function Two({ id }: { id?: string }) {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
@@ -43,6 +44,7 @@ function Leistungen({ id }: { id?: string }) {
 
   return (
     <section id={id} className="leistungen-section">
+      <SectionDots />
       <div
         className="leistungen-wrapper"
         style={{
@@ -84,4 +86,4 @@ function Leistungen({ id }: { id?: string }) {
   )
 }
 
-export default Leistungen
+export default Two

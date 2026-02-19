@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import './Kontakt.css'
+import './4.css'
+import SectionDots from './SectionDots'
 
-function Kontakt({ id }: { id?: string }) {
+function Four({ id }: { id?: string }) {
   const [scale, setScale] = useState(0.7)
   const [isScrolling, setIsScrolling] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
@@ -52,6 +53,7 @@ function Kontakt({ id }: { id?: string }) {
 
   return (
     <section id={id} className="kontakt-section">
+      <SectionDots />
       <div
         className="kontakt-wrapper"
         style={{
@@ -106,4 +108,4 @@ function Kontakt({ id }: { id?: string }) {
   )
 }
 
-export default Kontakt
+export default Four
