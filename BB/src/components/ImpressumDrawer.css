@@ -1,0 +1,80 @@
+.impressum-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.impressum-drawer-overlay.is-open {
+  pointer-events: auto;
+}
+
+.impressum-drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.impressum-drawer-overlay.is-open .impressum-drawer-backdrop {
+  opacity: 1;
+}
+
+.impressum-drawer-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--bg-primary, #ffffff);
+  color: var(--text-primary, #2a2a2a);
+  border-radius: 12px 12px 0 0;
+  padding: 1.75rem 2rem 2rem;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.impressum-drawer-overlay.is-open .impressum-drawer-panel {
+  transform: translateY(0);
+}
+
+.impressum-drawer-panel h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.impressum-drawer-body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.impressum-drawer-body p {
+  margin: 0 0 0.75rem 0;
+}
+
+.impressum-drawer-body p:last-child {
+  margin-bottom: 0;
+}
+
+.impressum-drawer-close {
+  display: block;
+  margin-top: 1.5rem;
+  padding: 0.5rem 1.25rem;
+  background: var(--color-coral, #7dd3c4);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-primary, #2a2a2a);
+}
+
+.impressum-drawer-close:hover {
+  background: var(--color-signal, #4dc3b5);
+}

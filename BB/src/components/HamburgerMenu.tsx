@@ -2,13 +2,18 @@ import { useState, useRef, useEffect } from 'react'
 import './HamburgerMenu.css'
 
 const MENU_ITEMS = [
-  { label: 'Die Praxis', id: 'praxis' }, /* Test: „Die Praxis“ = aktuelle Version */
+  { label: 'Die Praxis', id: 'praxis' },
   { label: 'Leistungen', id: 'leistungen' },
   { label: 'Über mich', id: 'ueber-mich' },
   { label: 'Kontakt', id: 'kontakt' },
+  { label: 'Impressum', action: 'impressum' as const },
 ]
 
-function HamburgerMenu() {
+type HamburgerMenuProps = {
+  onImpressumClick?: () => void
+}
+
+function HamburgerMenu({ onImpressumClick }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
@@ -70,11 +75,18 @@ function HamburgerMenu() {
             className={`hamburger-nav ${isClosing ? 'closing' : ''}`}
             onMouseLeave={closeMenu}
           >
-            {MENU_ITEMS.map((item) => (
+            {MENU_ITEMS.map((item, index) => (
               <button
-                key={item.id}
+                key={'id' in item ? item.id : `impressum-${index}`}
                 className="hamburger-nav-item"
-                onClick={() => scrollTo(item.id)}
+                onClick={() => {
+                  if ('action' in item && item.action === 'impressum') {
+                    onImpressumClick?.()
+                    closeMenu()
+                  } else if ('id' in item) {
+                    scrollTo(item.id)
+                  }
+                }}
               >
                 {item.label}
               </button>

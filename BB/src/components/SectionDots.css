@@ -1,29 +1,23 @@
-/* Nur auf Handy anzeigen: oben bündig wie Hamburger, rechts wie Map */
+/* Nur auf Handy: in Sektion verankert, scrollt mit (nicht fixed) */
 .section-dots {
   display: none;
-  position: fixed;
+  position: absolute;
   top: 3vh;
   right: 10vw;
   z-index: 600;
   pointer-events: none;
+  box-sizing: border-box;
 }
 
-/* Wie Aufmacher: 34vw Breite, 20 Spalten, 9 Zeilen, Kreis ≈ 1.55vw, Abstand 0.155vw */
 @media (max-width: 768px) {
   .section-dots {
     display: grid;
-    width: 34vw;
-    grid-template-columns: repeat(20, 1.55vw);
-    grid-template-rows: repeat(9, 1.55vw);
-    gap: 0.155vw;
-    box-sizing: border-box;
   }
 
-  .section-dots .section-dot {
-    width: 1.55vw;
-    height: 1.55vw;
+  .section-dot {
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    background-color: var(--color-coral, #7dd3c4);
-    opacity: 0.7;
+    box-sizing: border-box;
   }
 }

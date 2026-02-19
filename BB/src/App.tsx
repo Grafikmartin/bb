@@ -10,10 +10,12 @@ import Four from './components/4'
 import ScrollHint from './components/ScrollHint'
 import Footer from './components/Footer'
 import CursorFollower from './components/CursorFollower'
+import ImpressumDrawer from './components/ImpressumDrawer'
 
 function App() {
   const [canScroll, setCanScroll] = useState(false)
   const [showScrollHint, setShowScrollHint] = useState(false)
+  const [impressumOpen, setImpressumOpen] = useState(false)
 
   // Verhindere Scrollen während der Animation
   useEffect(() => {
@@ -42,7 +44,7 @@ function App() {
 
   return (
     <div className="app">
-      <HamburgerMenu />
+      <HamburgerMenu onImpressumClick={() => setImpressumOpen(true)} />
       <section className="aufmacher-section">
         <div className="welcome-container">
           <Aufmacher />
@@ -56,6 +58,7 @@ function App() {
       <Footer />
       {showScrollHint && <ScrollHint />}
       <CursorFollower />
+      <ImpressumDrawer isOpen={impressumOpen} onClose={() => setImpressumOpen(false)} />
     </div>
   )
 }
