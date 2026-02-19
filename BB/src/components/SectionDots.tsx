@@ -134,7 +134,6 @@ function SectionDots() {
       style={{
         width: `${CIRCLES_WIDTH_VW}vw`,
         height: `calc(${ROWS} * ${DIAMETER_VW}vw + ${ROWS - 1} * ${GAP_VW}vw)`,
-        display: 'grid',
         gridTemplateColumns: `repeat(${COLS}, ${DIAMETER_VW}vw)`,
         gridTemplateRows: `repeat(${ROWS}, ${DIAMETER_VW}vw)`,
         gap: `${GAP_VW}vw`,
